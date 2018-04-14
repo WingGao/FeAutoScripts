@@ -7,6 +7,7 @@ import time
 # Connects to the current device, returning a MonkeyDevice object
 device = MonkeyRunner.waitForConnection()
 
+
 # 10连
 # 罗伊-近防3 迪幽特-生命2 温蒂-防大1 希玛-防守指挥1
 #
@@ -18,21 +19,26 @@ def move(p1, p2, duration=1.0, step=10):
         device.touch(p1[0] + dx * i, p1[1] + dy * i, MonkeyDevice.MOVE)
         MonkeyRunner.sleep(0.1)
 
+
 def getFanweiBtn():
     img = device.takeSnapshot()
-    btn = img.getSubImage((248,1924,140,60))
+    btn = img.getSubImage((248, 1924, 140, 60))
     return btn
+
 
 # 提醒用户，用闹钟
 def notifyUser():
+    return 
     device.startActivity('com.android.deskclock/com.android.deskclock.AlarmsMainActivity')
     # TODO 更好的设置闹钟
     device.touch(917, 151, MonkeyDevice.DOWN_AND_UP)
     MonkeyRunner.sleep(1)
-    device.drag((696,669), (704,455),1)
+    device.drag((696, 669), (704, 455), 1)
     MonkeyRunner.sleep(1)
     device.touch(540, 1945, MonkeyDevice.DOWN_AND_UP)
     # device.startActivity('com.android.deskclock.HandleSetAlarm','SET_TIMER','LENGTH=1')
+
+
 # notifyUser()
 # sys.exit(2)
 
@@ -92,7 +98,7 @@ chap03t04 = [
     ['D', (447, 1577), (624, 1579)],
     ['END'],
     ['STAGE'],
-    
+
 ]
 chap05 = [
     ## chap5
@@ -186,12 +192,13 @@ chap10 = [
     ['END'],
     ['EXIT'],
 ]
-allstep = chap01 + chap02 + chap03t04+ chap05 + chap06 + otherChap + chap09 + chap10
+allstep = chap01 + chap02 + chap03t04 + chap05 + chap06 + otherChap + chap09 + chap10
+# allstep =  chap02 + chap03t04+ chap05 + chap06 + otherChap + chap09 + chap10
 # allstep = chap05 + chap06 + otherChap + chap09 + chap10
 
 # 原始'威胁范围'按钮
 normalFanweiBtn = getFanweiBtn()
- 
+
 for step in allstep:
     cmd = step[0]
     if cmd == 'D':
@@ -215,7 +222,7 @@ for step in allstep:
         device.touch(299, 1062, MonkeyDevice.DOWN_AND_UP)
         MonkeyRunner.sleep(1)
         for i in range(5):
-            device.touch(1027, 2088, MonkeyDevice.DOWN_AND_UP) # 有时候已经stage了
+            device.touch(1027, 2088, MonkeyDevice.DOWN_AND_UP)  # 有时候已经stage了
             btn = getFanweiBtn()
             if normalFanweiBtn.sameAs(btn, 0.9):
                 print 'normalFanweiBtn END match'
@@ -225,14 +232,14 @@ for step in allstep:
                 MonkeyRunner.sleep(1)
     elif cmd == 'STAGE':
         waitQ = range(60)
-        for i in waitQ: # 最多2分钟
+        for i in waitQ:  # 最多2分钟
             device.touch(285, 1430, MonkeyDevice.DOWN_AND_UP)  # task
             # 第一次忽律
             if i == 0:
                 MonkeyRunner.sleep(5)
                 continue
-            elif i == len(waitQ) -1:
-                sys.exit(1) #超时
+            elif i == len(waitQ) - 1:
+                sys.exit(1)  # 超时
             btn = getFanweiBtn()
             if normalFanweiBtn.sameAs(btn, 0.9):
                 print 'normalFanweiBtn STAGE match'
@@ -244,14 +251,8 @@ for step in allstep:
         device.touch(726, 1955, MonkeyDevice.DOWN_AND_UP)
         MonkeyRunner.sleep(5)
     elif cmd == 'EXIT':
-        scriptDuration = time.time()-scriptStarttime
-        print 'scripte complete use %i seconds'%scriptDuration
+        scriptDuration = time.time() - scriptStarttime
+        print 'script complete use %i seconds' % scriptDuration
         notifyUser()
         sys.exit(1)
     MonkeyRunner.sleep(1)
-
-# Takes a screenshot
-# result = device.takeSnapshot()
-
-# Writes the screenshot to a file
-# result.writeToFile('myproject/shot1.png','png')
