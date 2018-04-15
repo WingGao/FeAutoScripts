@@ -1,7 +1,6 @@
 {
     "type":"View",
     "selectedBox":1,
-    "selecteID":2,
     "props":{"width":1080,"sceneColor":"#000000","height":2160},
     "nodeParent":-1,
     "label":"View",
@@ -347,14 +346,6 @@
                                 "target":7,
                                 "key":"y",
                                 "index":13
-                            },
-                            {
-                                "value":769,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":7,
-                                "key":"y",
-                                "index":17
                             }],
                         "x":[
                             {
@@ -404,14 +395,6 @@
                                 "target":7,
                                 "key":"x",
                                 "index":13
-                            },
-                            {
-                                "value":188,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":7,
-                                "key":"x",
-                                "index":17
                             }]
                     }
                 },
@@ -585,14 +568,6 @@
                                 "target":16,
                                 "key":"x",
                                 "index":15
-                            },
-                            {
-                                "value":480,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":16,
-                                "key":"x",
-                                "index":20
                             }]
                     }
                 }],

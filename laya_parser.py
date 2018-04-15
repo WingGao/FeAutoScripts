@@ -169,7 +169,7 @@ def parse_file(f):
 result_file = open('out.txt', 'w')
 
 for fid in range(1, 11):
-    layaf = 'D:\\Projs\\FeLaya\\laya\\pages\\FeStage%02d.ui' % fid
+    layaf = 'D:\\Projs\\FeAutoScripts\\\FeLaya\\laya\\pages\\group_02\\FeStage%02d.ui' % fid
     if os.path.isfile(layaf):  # and (fid == 1 or fid == 3)
         steps = parse_file(layaf)
         print 'steps:',layaf
