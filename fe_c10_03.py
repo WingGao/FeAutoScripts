@@ -166,6 +166,7 @@ chap08 = [
     ['STAGE'],
 ]
 chap09 = [
+    ['EXIT'],
     ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage09.ui
     ['D', (271, 1412), (275, 1227)],
     ['T', (451, 1408), (808, 1416), (804, 1047)],
@@ -213,8 +214,7 @@ end = [
 
 allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
 # allstep =chap06 + chap07 + chap08 + chap09 + chap10
-# allstep =  chap10
-# allstep = chap09 + chap10
+# allstep = chap10
 
 allstep += end
 wd = WingDevice(device)

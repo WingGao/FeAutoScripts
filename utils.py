@@ -109,3 +109,27 @@ class WingDevice(object):
                 self.notifyUser()
                 sys.exit(1)
             MonkeyRunner.sleep(1)
+
+    def getStartBtn(self):
+        '''
+        获取章节页的标题栏，那个不会变
+        :return:
+        '''
+        img = self.device.takeSnapshot()
+        btn = img.getSubImage((235, 475, 79, 60))
+        return btn
+
+    def loopFe(self,allstep):
+        '''
+        全自动，包括开始，吃体力药，需要在章节列表页启动
+        :param allstep:
+        :return:
+        '''
+        normalBtn = self.getStartBtn() # 正常状态的按钮
+        # 点击开始
+        self.device.touch(306, 722, MonkeyDevice.DOWN_AND_UP)
+        MonkeyRunner.sleep(1)
+        watingBtn = self.getStartBtn() # 等待状态的按钮
+        self.device.touch(290, 1275, MonkeyDevice.DOWN_AND_UP) # 点击 开始战斗
+        # TODO 体力不够
+        pass
