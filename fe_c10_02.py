@@ -150,7 +150,6 @@ chap08 = [
     ['END'],
     ['D', (460, 1773), (455, 1238)],
     ['END'],
-    ['STAGE'],
 ]
 chap09 = [
     ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage09.ui

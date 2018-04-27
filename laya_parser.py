@@ -1,6 +1,7 @@
 # coding=utf-8
 import json
 import os
+import datetime
 
 
 class Action(object):
@@ -167,6 +168,7 @@ def parse_file(f):
 
 
 result_file = open('out.txt', 'w')
+result_file.write('# time %s\n' % datetime.datetime.now())
 
 for fid in range(1, 11):
     layaf = 'D:\\Projs\\FeAutoScripts\\\FeLaya\\laya\\pages\\group_02\\FeStage%02d.ui' % fid
