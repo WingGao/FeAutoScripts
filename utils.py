@@ -41,7 +41,7 @@ class WingDevice(object):
     # 提醒用户，用闹钟
     def notifyUser(self):
         device = self.device
-        return
+        # return
         device.startActivity('com.android.deskclock/com.android.deskclock.AlarmsMainActivity')
         # TODO 更好的设置闹钟
         device.touch(917, 151, MonkeyDevice.DOWN_AND_UP)

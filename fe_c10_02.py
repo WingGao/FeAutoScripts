@@ -2,8 +2,11 @@
 # Imports the monkeyrunner modules used by this program
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
+import platform
+if platform.system() == 'Windows':
+    # print sys.path
+    sys.path.append(sys.path[0].split(':', 1)[1])
 
-sys.path.append(sys.path[0].split(':', 1)[1])
 from utils import WingDevice
 import time
 
