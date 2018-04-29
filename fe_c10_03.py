@@ -2,9 +2,9 @@
 # Imports the monkeyrunner modules used by this program
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
-import platform
+import os
 
-if platform.system() == 'Windows':
+if ':' in os.path.abspath(__file__):  # windows
     # print sys.path
     sys.path.append(sys.path[0].split(':', 1)[1])
 
@@ -12,6 +12,7 @@ from utils import WingDevice
 import time
 
 # Connects to the current device, returning a MonkeyDevice object
+print 'waitForConnection'
 device = MonkeyRunner.waitForConnection()
 
 # 10连
@@ -213,10 +214,13 @@ end = [
     ['EXIT']
 ]
 
-allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
-# allstep =chap06 + chap07 + chap08 + chap09 + chap10
+# allstep =  chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
+allstep = chap06 + chap07 + chap08 + chap09 + chap10
 # allstep = chap10
 
 allstep += end
 wd = WingDevice(device)
 wd.startFe(allstep)
+
+allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10 + end
+wd.loopFe(allstep)
