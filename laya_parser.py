@@ -171,10 +171,10 @@ result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
 
 for fid in range(1, 11):
-    layaf = 'D:\\Projs\\FeAutoScripts\\\FeLaya\\laya\\pages\\group_02\\FeStage%02d.ui' % fid
+    layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'FeLaya/laya/pages/group_03/FeStage%02d.ui' % fid)
     if os.path.isfile(layaf):  # and (fid == 1 or fid == 3)
         steps = parse_file(layaf)
-        print 'steps:',layaf
+        print 'steps:', layaf
         result_file.write('chap%02d = [\n' % fid)
         result_file.write('## %s\n' % layaf)
         for i in steps:

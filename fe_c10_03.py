@@ -2,8 +2,12 @@
 # Imports the monkeyrunner modules used by this program
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
+import platform
 
-sys.path.append(sys.path[0].split(':', 1)[1])
+if platform.system() == 'Windows':
+    # print sys.path
+    sys.path.append(sys.path[0].split(':', 1)[1])
+
 from utils import WingDevice
 import time
 
@@ -17,9 +21,9 @@ device = MonkeyRunner.waitForConnection()
 print 'Chap1-2 10连'
 scriptStarttime = time.time()
 
-# time 2018-04-28 03:31:27.292000
+# time 2018-04-28 12:27:34.713615
 chap01 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage01.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage01.ui
     ['PREPARE'],
     ['D', (274, 1046), (91, 1049)],
     ['D', (92, 1234), (271, 1228)],
@@ -36,7 +40,7 @@ chap01 = [
     ['STAGE'],
 ]
 chap02 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage02.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage02.ui
     ['D', (808, 1409), (804, 1593)],
     ['T', (812, 1046), (811, 682), (632, 688)],
     ['D', (996, 1231), (986, 1419)],
@@ -49,7 +53,7 @@ chap02 = [
     ['STAGE'],
 ]
 chap03 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage03.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage03.ui
     ['PREPARE'],
     ['D', (450, 1593), (632, 1583)],
     ['D', (633, 1767), (454, 1759)],
@@ -66,7 +70,7 @@ chap03 = [
     ['STAGE'],
 ]
 chap04 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage04.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage04.ui
     ['D', (451, 1773), (267, 1773)],
     ['D', (630, 1590), (458, 1762)],
     ['D', (989, 1582), (627, 1589)],
@@ -87,7 +91,7 @@ chap04 = [
     ['STAGE'],
 ]
 chap05 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage05.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage05.ui
     ['D', (807, 507), (617, 693)],
     ['END'],
     ['D', (617, 693), (275, 689)],
@@ -110,7 +114,7 @@ chap05 = [
     ['STAGE'],
 ]
 chap06 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage06.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage06.ui
     ['D', (991, 1229), (798, 1221)],
     ['D', (986, 1413), (990, 1224)],
     ['D', (809, 1586), (991, 1398)],
@@ -124,7 +128,7 @@ chap06 = [
     ['STAGE'],
 ]
 chap07 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage07.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage07.ui
     ['PREPARE'],
     ['D', (455, 1406), (626, 1415)],
     ['D', (636, 1584), (451, 1582)],
@@ -141,7 +145,7 @@ chap07 = [
     ['STAGE'],
 ]
 chap08 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage08.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage08.ui
     ['D', (452, 1586), (267, 1397)],
     ['D', (623, 1588), (447, 1587)],
     ['D', (802, 1590), (631, 1590)],
@@ -159,32 +163,29 @@ chap08 = [
     ['D', (277, 1589), (99, 870)],
     ['D', (89, 1397), (97, 868)],
     ['END'],
-    ['T', (801, 1592), (806, 1590), (805, 1412)],
+    ['T', (633, 1594), (806, 1590), (805, 1412)],
     ['END'],
     ['D', (817, 1590), (813, 1228)],
     ['END'],
     ['STAGE'],
 ]
 chap09 = [
-    ['EXIT'],
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage09.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage09.ui
     ['D', (271, 1412), (275, 1227)],
     ['T', (451, 1408), (808, 1416), (804, 1047)],
     ['D', (449, 1591), (448, 1414)],
     ['D', (453, 1760), (455, 1582)],
     ['END'],
-    ['D', (448, 1414), (627, 1214)],
-    ['D', (275, 1227), (642, 1208)],
-    ['D', (808, 1416), (276, 1411)],
+    ['D', (275, 1227), (445, 1212)],
+    ['D', (808, 1416), (444, 1025)],
     ['D', (455, 1582), (270, 1227)],
     ['END'],
-    ['D', (642, 1208), (449, 1224)],
-    ['D', (633, 1413), (633, 1232)],
+    ['D', (445, 1212), (808, 1040)],
     ['END'],
     ['STAGE'],
 ]
 chap10 = [
-    ## D:\Projs\FeAutoScripts\\FeLaya\laya\pages\group_02\FeStage10.ui
+    ## /Users/gaoyunyun/Projs/FeScripts/FeLaya/laya/pages/group_03/FeStage10.ui
     ['PREPARE'],
     ['D', (268, 1584), (818, 1592)],
     ['D', (630, 1592), (453, 1588)],

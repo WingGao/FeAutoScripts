@@ -31,7 +31,7 @@ class WingDevice(object):
         dy = (p2[1] - p1[1]) / step
         for i in range(0, step + 1):
             self.device.touch(p1[0] + dx * i, p1[1] + dy * i, MonkeyDevice.MOVE)
-            MonkeyRunner.sleep(0.1)
+            MonkeyRunner.sleep(duration / step)
 
     def getFanweiBtn(self):
         img = self.device.takeSnapshot()
@@ -67,10 +67,10 @@ class WingDevice(object):
                     if i == 0:
                         device.touch(p[0], p[1], MonkeyDevice.DOWN)
                     elif i == len(points) - 1:
-                        self.move(points[i - 1], p)
+                        self.move(points[i - 1], p, 0.5)
                         device.touch(p[0], p[1], MonkeyDevice.UP)
                     else:
-                        self.move(points[i - 1], p)
+                        self.move(points[i - 1], p, 0.5)
             elif cmd == 'END':
                 device.touch(515, 1945, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)
@@ -119,17 +119,17 @@ class WingDevice(object):
         btn = img.getSubImage((235, 475, 79, 60))
         return btn
 
-    def loopFe(self,allstep):
+    def loopFe(self, allstep):
         '''
         全自动，包括开始，吃体力药，需要在章节列表页启动
         :param allstep:
         :return:
         '''
-        normalBtn = self.getStartBtn() # 正常状态的按钮
+        normalBtn = self.getStartBtn()  # 正常状态的按钮
         # 点击开始
         self.device.touch(306, 722, MonkeyDevice.DOWN_AND_UP)
         MonkeyRunner.sleep(1)
-        watingBtn = self.getStartBtn() # 等待状态的按钮
-        self.device.touch(290, 1275, MonkeyDevice.DOWN_AND_UP) # 点击 开始战斗
+        watingBtn = self.getStartBtn()  # 等待状态的按钮
+        self.device.touch(290, 1275, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
         # TODO 体力不够
         pass
