@@ -3,14 +3,23 @@ from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
 
 
-def hello():
-    print 'hello utils'
+def argbSame(argb, argb2, rate=5):
+    r = argb2[1]
+    g = argb2[2]
+    b = argb2[3]
+    return (r - rate <= argb[1] <= r + rate) and (g - rate <= argb[2] <= g + rate) and (b - rate <= argb[3] <= b + rate)
+
+
+class FeState(object):
+    MY_TURN = 1
+    ENEMY_TURN = 2
+    CHAIN_10 = 3  # 10连界面
+    UNKNOWN = 100
 
 
 class WingDevice(object):
     def __init__(self, device):
         self.device = device
-        self.normalFanweiBtn = self.getFanweiBtn()
 
     # def move(self, points, duration=1.0):
     #     '''
@@ -33,15 +42,10 @@ class WingDevice(object):
             self.device.touch(p1[0] + dx * i, p1[1] + dy * i, MonkeyDevice.MOVE)
             MonkeyRunner.sleep(duration / step)
 
-    def getFanweiBtn(self):
-        img = self.device.takeSnapshot()
-        btn = img.getSubImage((248, 1924, 140, 60))
-        return btn
-
     # 提醒用户，用闹钟
     def notifyUser(self):
         device = self.device
-        # return
+        return
         device.startActivity('com.android.deskclock/com.android.deskclock.AlarmsMainActivity')
         # TODO 更好的设置闹钟
         device.touch(917, 151, MonkeyDevice.DOWN_AND_UP)
@@ -51,7 +55,7 @@ class WingDevice(object):
         device.touch(540, 1945, MonkeyDevice.DOWN_AND_UP)
         # device.startActivity('com.android.deskclock.HandleSetAlarm','SET_TIMER','LENGTH=1')
 
-    def startFe(self, allstep):
+    def startFe(self, allstep, can_exit=True):
         device = self.device
 
         for step in allstep:
@@ -78,14 +82,14 @@ class WingDevice(object):
                 MonkeyRunner.sleep(1)
                 for i in range(5):
                     device.touch(1027, 2088, MonkeyDevice.DOWN_AND_UP)  # 有时候已经stage了
-                    btn = self.getFanweiBtn()
-                    if self.normalFanweiBtn.sameAs(btn, 0.9):
-                        print 'normalFanweiBtn END match'
+                    if self.feState() == FeState.MY_TURN:
+                        print 'action END match'
                         break
                     else:
-                        print 'normalFanweiBtn END unmatch'
+                        print 'action END unmatch'
                         MonkeyRunner.sleep(1)
             elif cmd == 'STAGE':
+                print 'wait STAGE'
                 waitQ = range(60)
                 for i in waitQ:  # 最多2分钟
                     device.touch(285, 1430, MonkeyDevice.DOWN_AND_UP)  # task
@@ -95,19 +99,19 @@ class WingDevice(object):
                         continue
                     elif i == len(waitQ) - 1:
                         sys.exit(1)  # 超时
-                    btn = self.getFanweiBtn()
-                    if self.normalFanweiBtn.sameAs(btn, 0.9):
-                        print 'normalFanweiBtn STAGE match'
+                    if self.feState() == FeState.MY_TURN:
                         break
                     else:
-                        print 'normalFanweiBtn STAGE unmatch'
                         MonkeyRunner.sleep(2)
+
             elif cmd == 'PREPARE':
                 device.touch(726, 1955, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(5)
             elif cmd == 'EXIT':
-                self.notifyUser()
-                sys.exit(1)
+                if can_exit:
+                    self.notifyUser()
+                    sys.exit(1)
+                return
             MonkeyRunner.sleep(1)
 
     def getStartBtn(self):
@@ -125,11 +129,51 @@ class WingDevice(object):
         :param allstep:
         :return:
         '''
-        normalBtn = self.getStartBtn()  # 正常状态的按钮
-        # 点击开始
-        self.device.touch(306, 722, MonkeyDevice.DOWN_AND_UP)
-        MonkeyRunner.sleep(1)
-        watingBtn = self.getStartBtn()  # 等待状态的按钮
-        self.device.touch(290, 1275, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
-        # TODO 体力不够
-        pass
+        print '[loopFe] start'
+        cnt = 0
+        print ''
+        while True:
+            cnt += 1
+            print '[loopFe] round', cnt
+            self.wait_state(FeState.CHAIN_10)
+            # 点击开始
+            self.device.touch(306, 722, MonkeyDevice.DOWN_AND_UP)
+            MonkeyRunner.sleep(1)
+            self.device.touch(290, 1275, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
+            MonkeyRunner.sleep(1)
+            # 体力不够
+            for i in range(3):
+                self.device.touch(313, 1191, MonkeyDevice.DOWN_AND_UP)  # 点击 回复/确定
+                MonkeyRunner.sleep(1)
+
+            self.wait_state(FeState.MY_TURN)
+            self.startFe(allstep, False)
+
+    def wait_state(self, state):
+        while self.feState() != state:
+            MonkeyRunner.sleep(1)
+
+    def feState(self, mImg=None):
+        '''判定当前画面状态
+        :param mImg: MonkeyImage
+        :return: FeState
+        '''
+        if mImg is None:
+            mImg = self.device.takeSnapshot()
+        wxfw = mImg.getRawPixel(280, 1985)  # 通过 危险范围 来判定
+        if argbSame(wxfw, (-1, 169, 61, 85)):  # 正常,我的回合 (-1, 169, 61, 85)
+            return FeState.MY_TURN
+        elif argbSame(wxfw, (-1, 85, 31, 43)):
+            # 敌人 (-1, 85, 31, 43)
+            # 弹窗 (-1, 84, 30, 42)
+            return FeState.ENEMY_TURN
+        elif argbSame(mImg.getRawPixel(648, 837), (-1, 202, 39, 69)):  # 10连界面
+            return FeState.CHAIN_10
+
+        return FeState.UNKNOWN
+
+    def test(self):
+        for i in range(100):
+            mImg = self.device.takeSnapshot()
+            print mImg.getRawPixel(648, 837)
+            MonkeyRunner.sleep(0.3)
