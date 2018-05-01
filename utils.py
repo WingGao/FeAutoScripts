@@ -113,16 +113,20 @@ class WingDevice(object):
                 return
             MonkeyRunner.sleep(1)
 
-    def loopFe(self, allstep):
+    def loopFe(self, allstep, num=None, stam=True):
         '''
         全自动，包括开始，吃体力药，需要在章节列表页启动
         :param allstep:
+        :param num: 最大次数
+        :param stam: 自动吃药
         :return:
         '''
         print '[loopFe] start'
         cnt = 0
         print ''
         while True:
+            if num is not None and cnt >= num:  # 最大次数
+                return
             cnt += 1
             print '[loopFe] round', cnt
             self.wait_state(FeState.CHAIN_10)
@@ -133,6 +137,8 @@ class WingDevice(object):
             MonkeyRunner.sleep(1)
             # 体力不够
             for i in range(3):
+                if not stam:  # 不自动吃药
+                    break
                 self.device.touch(313, 1191 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 回复/确定
                 MonkeyRunner.sleep(1)
 
