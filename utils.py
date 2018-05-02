@@ -26,7 +26,8 @@ class WingDevice(object):
         self.dy = 0  # 偏移修正
 
         if self.width == 1080 and self.height >= 1920:
-            self.dy = (self.height - 2160) / 2  # 因为是拿mate写的脚本
+            if self.height != 2040:  # 2040是全面屏的尺寸，特别奇怪，不是2160
+                self.dy = (self.height - 2160) / 2  # 因为是拿mate写的脚本
         else:
             raise Exception('not support w=%i h=%i' % (self.width, self.height))
 
@@ -165,6 +166,9 @@ class WingDevice(object):
             return FeState.ENEMY_TURN
         elif argbSame(mImg.getRawPixel(648, 837 + self.dy), (-1, 202, 39, 69)):  # 10连界面
             return FeState.CHAIN_10
+        elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 75, 95, 82)):  # 错误803-3101
+            print 'FEH get an error'
+            self.device.touch(267, 1123 + self.dy, MonkeyDevice.DOWN_AND_UP)
 
         return FeState.UNKNOWN
 
@@ -172,7 +176,9 @@ class WingDevice(object):
         print self.device.getProperty('display.width')
         print self.device.getProperty('display.height')
         print self.device.getProperty('display.density')
-        # for i in range(100):
-        #     mImg = self.device.takeSnapshot()
-        #     print mImg.getRawPixel(648, 837)
-        #     MonkeyRunner.sleep(0.3)
+        print 'feState', self.feState()
+        for i in range(100):
+            print 'feState', self.feState()
+            mImg = self.device.takeSnapshot()
+            print mImg.getRawPixel(267, 1123)
+            MonkeyRunner.sleep(0.3)

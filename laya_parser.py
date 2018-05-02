@@ -171,7 +171,7 @@ result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
 
 for fid in range(1, 11):
-    layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'FeLaya/laya/pages/group_03/FeStage%02d.ui' % fid)
+    layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'FeLaya/laya/pages/group_04/FeStage%02d.ui' % fid)
     if os.path.isfile(layaf):  # and (fid == 1 or fid == 3)
         steps = parse_file(layaf)
         print 'steps:', layaf
