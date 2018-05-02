@@ -2,8 +2,8 @@
 # Imports the monkeyrunner modules used by this program
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
-import platform
-if platform.system() == 'Windows':
+import os
+if ':' in os.path.abspath(__file__):  # window
     # print sys.path
     sys.path.append(sys.path[0].split(':', 1)[1])
 
@@ -199,9 +199,10 @@ end = [
 ]
 
 allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
-allstep =chap06 + chap07 + chap08 + chap09 + chap10
+# allstep =chap06 + chap07 + chap08 + chap09 + chap10
 # allstep = chap09 + chap10
 
 allstep += end
 wd = WingDevice(device)
-wd.startFe(allstep)
+# wd.startFe(allstep)
+wd.loopFe(allstep, 17)

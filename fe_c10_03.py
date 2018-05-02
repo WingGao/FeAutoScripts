@@ -215,7 +215,7 @@ end = [
 ]
 
 allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
-# allstep = chap06 + chap07 + chap08 + chap09 + chap10
+allstep = chap05+ chap06 + chap07 + chap08 + chap09 + chap10
 # allstep = chap10
 
 allstep += end
@@ -224,4 +224,4 @@ wd = WingDevice(device)
 
 allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10 + end
 # wd.loopFe(allstep, stam=False)
-wd.loopFe(allstep)
+wd.loopFe(allstep, num=7)
