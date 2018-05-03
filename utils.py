@@ -14,6 +14,7 @@ class FeState(object):
     MY_TURN = 1
     ENEMY_TURN = 2
     CHAIN_10 = 3  # 10连界面
+    CHAPTER = 4  # 章节页面
     UNKNOWN = 100
 
 
@@ -146,6 +147,32 @@ class WingDevice(object):
             self.wait_state(FeState.MY_TURN)
             self.startFe(allstep, False)
 
+    def loop_ghb(self, allstep, num=None):
+        '''
+        全自动大英雄35，需要在章节列表页启动
+        :param allstep:
+        :param num: 最大次数
+        :param stam: 自动吃药
+        :return:
+        '''
+        print '[loop_ghb] start'
+        cnt = 0
+        print ''
+        while True:
+            if num is not None and cnt >= num:  # 最大次数
+                return
+            cnt += 1
+            print '[loop_ghb] round', cnt
+            self.wait_state(FeState.CHAPTER)
+            # 点击30
+            self.device.touch(310, 1412 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            MonkeyRunner.sleep(1)
+            self.device.touch(310, 1363 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
+            MonkeyRunner.sleep(1)
+
+            self.wait_state(FeState.MY_TURN)
+            self.startFe(allstep, False)
+
     def wait_state(self, state):
         while self.feState() != state:
             MonkeyRunner.sleep(1)
@@ -166,6 +193,11 @@ class WingDevice(object):
             return FeState.ENEMY_TURN
         elif argbSame(mImg.getRawPixel(648, 837 + self.dy), (-1, 202, 39, 69)):  # 10连界面
             return FeState.CHAIN_10
+        elif argbSame(mImg.getRawPixel(143, 350 + self.dy), (-1, 0, 132, 193)):  # 章节页面，通过队伍编号
+            return FeState.CHAPTER
+        elif argbSame(mImg.getRawPixel(800, 183 + self.dy), (-1, 71, 33, 39)):  # 跳过按钮
+            print 'FEH get skip'
+            self.device.touch(800, 183 + self.dy, MonkeyDevice.DOWN_AND_UP)
         elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 55, 83, 72)):  # 错误803-3101
             print 'FEH get an error'
             self.device.touch(267, 1123 + self.dy, MonkeyDevice.DOWN_AND_UP)
@@ -183,5 +215,5 @@ class WingDevice(object):
         for i in range(100):
             print 'feState', self.feState()
             mImg = self.device.takeSnapshot()
-            print mImg.getRawPixel(313, 1191 + self.dy)
+            print mImg.getRawPixel(800, 183 + self.dy)
             MonkeyRunner.sleep(0.3)

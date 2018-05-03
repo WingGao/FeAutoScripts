@@ -233,7 +233,7 @@ end = [
 ]
 
 allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
-allstep =  chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
+allstep = chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10
 # allstep =  chap06 + chap07 + chap08 + chap09 + chap10
 allstep = chap09 + chap10
 # allstep = chap10
@@ -244,4 +244,40 @@ wd = WingDevice(device)
 
 allstep = chap01 + chap02 + chap03 + chap04 + chap05 + chap06 + chap07 + chap08 + chap09 + chap10 + end
 # wd.loopFe(allstep, stam=False)
-wd.loopFe(allstep )
+# wd.loopFe(allstep)
+
+# 大英雄 仓鸦
+chap_cy = [
+    ## D:\Projs\FeAutoScripts\FeLaya/laya/pages/group_04/FeStage_cy.ui
+    ['D', (274, 864), (631, 1230)],
+    ['D', (93, 867), (89, 1229)],
+    ['D', (88, 686), (274, 868)],
+    ['D', (92, 1047), (91, 687)],
+    ['END'],
+    ['D', (455, 1052), (94, 1044)],
+    ['D', (91, 687), (87, 507)],
+    ['D', (274, 868), (91, 868)],
+    ['END'],
+    ['D', (91, 868), (277, 864)],
+    ['END'],
+    ['D', (94, 1044), (90, 868)],
+    ['END'],
+    ['D', (277, 864), (277, 1051)],
+    ['D', (87, 507), (95, 869)],
+    ['END'],
+    ['D', (95, 869), (273, 1048)],
+    ['D', (94, 688), (98, 868)],
+    ['D', (273, 874), (97, 686)],
+    ['END'],
+    ['D', (273, 1048), (460, 1048)],
+    ['D', (89, 1229), (636, 1043)],
+    ['END'],
+    ['D', (451, 1043), (272, 1418)],
+    ['D', (271, 1040), (632, 1052)],
+    ['END'],
+    ['D', (460, 1422), (275, 1580)],
+    ['END'],
+    # ['STAGE'],
+]
+
+wd.loop_ghb(chap_cy + end)

@@ -122,7 +122,7 @@ def parse_file(f):
             if act is not None:
                 cha.lastAction = act
 
-    while i < 50:
+    while i < 100:
         if i == 0:
             setCharPos(0)
             if chaPre is not None:
@@ -170,12 +170,19 @@ def parse_file(f):
 result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
 
-for fid in range(1, 11):
-    layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)), 'FeLaya/laya/pages/group_04/FeStage%02d.ui' % fid)
+for fid in  ['_cy']:
+    if isinstance(fid, int):
+        layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                             'FeLaya/laya/pages/group_04/FeStage%02d.ui' % fid)
+        varname = 'chap%02d' % fid
+    else:
+        layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)),
+                             'FeLaya/laya/pages/group_04/FeStage%s.ui' % fid)
+        varname = 'chap%s' % fid
     if os.path.isfile(layaf):  # and (fid == 1 or fid == 3)
         steps = parse_file(layaf)
         print 'steps:', layaf
-        result_file.write('chap%02d = [\n' % fid)
+        result_file.write('%s = [\n' % varname)
         result_file.write('## %s\n' % layaf)
         for i in steps:
             if i is None:
