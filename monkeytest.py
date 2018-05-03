@@ -3,7 +3,10 @@
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 
 import sys
-sys.path.append(sys.path[0].split(':', 1)[1])
+import os
+
+if ':' in os.path.abspath(__file__):  # windows
+    sys.path.append(sys.path[0].split(':', 1)[1])
 from utils import WingDevice
 # Connects to the current device, returning a MonkeyDevice object
 device = MonkeyRunner.waitForConnection()

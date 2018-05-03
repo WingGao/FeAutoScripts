@@ -166,9 +166,12 @@ class WingDevice(object):
             return FeState.ENEMY_TURN
         elif argbSame(mImg.getRawPixel(648, 837 + self.dy), (-1, 202, 39, 69)):  # 10连界面
             return FeState.CHAIN_10
-        elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 75, 95, 82)):  # 错误803-3101
+        elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 55, 83, 72)):  # 错误803-3101
             print 'FEH get an error'
             self.device.touch(267, 1123 + self.dy, MonkeyDevice.DOWN_AND_UP)
+        elif argbSame(mImg.getRawPixel(313, 1191 + self.dy), (-1, 63, 89, 74)):  # 回复体力成功，关闭
+            print 'stamina full success'
+            self.device.touch(313, 1191 + self.dy, MonkeyDevice.DOWN_AND_UP)
 
         return FeState.UNKNOWN
 
@@ -180,5 +183,5 @@ class WingDevice(object):
         for i in range(100):
             print 'feState', self.feState()
             mImg = self.device.takeSnapshot()
-            print mImg.getRawPixel(267, 1123)
+            print mImg.getRawPixel(313, 1191 + self.dy)
             MonkeyRunner.sleep(0.3)

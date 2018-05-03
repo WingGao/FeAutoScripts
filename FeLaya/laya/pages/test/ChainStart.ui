@@ -24,7 +24,7 @@
             "compId":2,
             "child":[
                 ],
-            "$HIDDEN":false
+            "$HIDDEN":true
         },
         {
             "x":15,
@@ -43,16 +43,16 @@
         {
             "x":15,
             "type":"Image",
-            "props":{"skin":"chain-c3.jpg","alpha":0.5},
+            "props":{"skin":"chain-c3.jpg","name":"需要回复","alpha":0.5},
             "nodeParent":1,
-            "label":"Image",
+            "label":"Image(需要回复)",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":3,
             "child":[
                 ],
-            "$HIDDEN":true
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -65,21 +65,22 @@
             "hasChild":false,
             "compId":4,
             "child":[
-                ]
+                ],
+            "$HIDDEN":false
         },
         {
             "x":15,
             "type":"Image",
-            "props":{"skin":"chain-c4.jpg","alpha":0.5},
+            "props":{"skin":"chain-c4.jpg","name":"回复成功","alpha":0.5},
             "nodeParent":1,
-            "label":"Image",
+            "label":"Image(回复成功)",
             "isDirectory":false,
             "isAniNode":true,
             "hasChild":false,
             "compId":5,
             "child":[
                 ],
-            "$HIDDEN":true
+            "$HIDDEN":false
         },
         {
             "x":15,
@@ -93,7 +94,7 @@
             "compId":6,
             "child":[
                 ],
-            "$HIDDEN":false
+            "$HIDDEN":true
         },
         {
             "x":15,
@@ -139,7 +140,7 @@
         {
             "x":15,
             "type":"Sprite",
-            "props":{"y":1123,"x":267,"width":79,"height":56},
+            "props":{"y":1191,"x":313,"width":79,"height":56},
             "nodeParent":1,
             "label":"Sprite",
             "isDirectory":false,
