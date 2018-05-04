@@ -198,6 +198,7 @@ class WingDevice(object):
         elif argbSame(mImg.getRawPixel(800, 183 + self.dy), (-1, 71, 33, 39)):  # 跳过按钮
             print 'FEH get skip'
             self.device.touch(800, 183 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            MonkeyRunner.sleep(1)
         elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 55, 83, 72)):  # 错误803-3101
             print 'FEH get an error'
             self.device.touch(267, 1123 + self.dy, MonkeyDevice.DOWN_AND_UP)
