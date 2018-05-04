@@ -30,7 +30,8 @@ class WingDevice(object):
             if self.height != 2040:  # 2040是全面屏的尺寸，特别奇怪，不是2160
                 self.dy = (self.height - 2160) / 2  # 因为是拿mate写的脚本
         else:
-            raise Exception('not support w=%i h=%i' % (self.width, self.height))
+            raise Exception('not support w=%i h=%i' %
+                            (self.width, self.height))
 
     def get_fix_point(self, point):
         np = (point[0], point[1] + self.dy)
@@ -40,14 +41,16 @@ class WingDevice(object):
         dx = (p2[0] - p1[0]) / step
         dy = (p2[1] - p1[1]) / step
         for i in range(0, step + 1):
-            self.device.touch(p1[0] + dx * i, p1[1] + dy * i, MonkeyDevice.MOVE)
+            self.device.touch(p1[0] + dx * i, p1[1] +
+                              dy * i, MonkeyDevice.MOVE)
             MonkeyRunner.sleep(duration / step)
 
     # 提醒用户，用闹钟
     def notifyUser(self):
         device = self.device
         return
-        device.startActivity('com.android.deskclock/com.android.deskclock.AlarmsMainActivity')
+        device.startActivity(
+            'com.android.deskclock/com.android.deskclock.AlarmsMainActivity')
         # TODO 更好的设置闹钟
         device.touch(917, 151, MonkeyDevice.DOWN_AND_UP)
         MonkeyRunner.sleep(1)
@@ -65,25 +68,29 @@ class WingDevice(object):
                 du = 0.5
                 if len(step) == 4:
                     du = step[3]
-                device.drag(self.get_fix_point(step[1]), self.get_fix_point(step[2]), du)
+                device.drag(self.get_fix_point(
+                    step[1]), self.get_fix_point(step[2]), du)
             elif cmd == 'T':
                 points = step[1:]
                 for i, p in enumerate(points):
                     if i == 0:
                         device.touch(p[0], p[1] + self.dy, MonkeyDevice.DOWN)
                     elif i == len(points) - 1:
-                        self.move(self.get_fix_point(points[i - 1]), self.get_fix_point(p), 0.5)
+                        self.move(self.get_fix_point(
+                            points[i - 1]), self.get_fix_point(p), 0.5)
                         device.touch(p[0], p[1] + self.dy, MonkeyDevice.UP)
                     else:
-                        self.move(self.get_fix_point(points[i - 1]), self.get_fix_point(p), 0.5)
+                        self.move(self.get_fix_point(
+                            points[i - 1]), self.get_fix_point(p), 0.5)
             elif cmd == 'END':
                 device.touch(515, 1945 + self.dy, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)
                 device.touch(299, 1062 + self.dy, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)
                 for i in range(5):
-                    device.touch(1027, 2088 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 有时候已经stage了
-                    if self.feState() == FeState.MY_TURN:
+                    device.touch(1027, 2088 + self.dy,
+                                 MonkeyDevice.DOWN_AND_UP)  # 有时候已经stage了
+                    if self.feState() in [FeState.MY_TURN, FeState.CHAIN_10, FeState.CHAPTER]:
                         print 'action END match'
                         break
                     else:
@@ -93,7 +100,8 @@ class WingDevice(object):
                 print 'wait STAGE'
                 waitQ = range(60)
                 for i in waitQ:  # 最多2分钟
-                    device.touch(285, 1430 + self.dy, MonkeyDevice.DOWN_AND_UP)  # task
+                    device.touch(285, 1430 + self.dy,
+                                 MonkeyDevice.DOWN_AND_UP)  # task
                     # 第一次忽律
                     if i == 0:
                         MonkeyRunner.sleep(5)
@@ -135,13 +143,15 @@ class WingDevice(object):
             # 点击开始
             self.device.touch(306, 722 + self.dy, MonkeyDevice.DOWN_AND_UP)
             MonkeyRunner.sleep(1)
-            self.device.touch(290, 1275 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
+            self.device.touch(290, 1275 + self.dy,
+                              MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
             MonkeyRunner.sleep(1)
             # 体力不够
             for i in range(3):
                 if not stam:  # 不自动吃药
                     break
-                self.device.touch(313, 1191 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 回复/确定
+                self.device.touch(313, 1191 + self.dy,
+                                  MonkeyDevice.DOWN_AND_UP)  # 点击 回复/确定
                 MonkeyRunner.sleep(1)
 
             self.wait_state(FeState.MY_TURN)
@@ -167,7 +177,8 @@ class WingDevice(object):
             # 点击30
             self.device.touch(310, 1412 + self.dy, MonkeyDevice.DOWN_AND_UP)
             MonkeyRunner.sleep(1)
-            self.device.touch(310, 1363 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
+            self.device.touch(310, 1363 + self.dy,
+                              MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
             MonkeyRunner.sleep(1)
 
             self.wait_state(FeState.MY_TURN)
