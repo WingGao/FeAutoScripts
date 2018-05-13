@@ -169,15 +169,15 @@ def parse_file(f):
 
 result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
-
-for fid in  ['_cy', '_am']:
+ghl_list =  ['_cy', '_am', '_mks']
+for fid in ghl_list:
     if isinstance(fid, int):
         layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)),
                              'FeLaya/laya/pages/group_04/FeStage%02d.ui' % fid)
         varname = 'chap%02d' % fid
     else:
         layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)),
-                             'FeLaya/laya/pages/group_04/FeStage%s.ui' % fid)
+                             'FeLaya/laya/pages/ghb/FeStage%s.ui' % fid)
         varname = 'chap%s' % fid
     if os.path.isfile(layaf):  # and (fid == 1 or fid == 3)
         steps = parse_file(layaf)

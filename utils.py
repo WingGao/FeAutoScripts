@@ -1,6 +1,7 @@
 # coding=utf-8
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
+import random
 
 
 def argbSame(argb, argb2, rate=5):
@@ -16,6 +17,13 @@ class FeState(object):
     CHAIN_10 = 3  # 10连界面
     CHAPTER = 4  # 章节页面
     UNKNOWN = 100
+
+
+class FeLevel(object):
+    NORMAL = 0
+    HARD = 1
+    LUNATIC = 2
+    INFERNAL = 3
 
 
 class WingDevice(object):
@@ -65,30 +73,31 @@ class WingDevice(object):
         for step in allstep:
             cmd = step[0]
             if cmd == 'D':
-                du = 0.5
+                du = random.uniform(0.6, 1.2)
                 if len(step) == 4:
                     du = step[3]
                 device.drag(self.get_fix_point(
                     step[1]), self.get_fix_point(step[2]), du)
             elif cmd == 'T':
                 points = step[1:]
+                du = random.uniform(0.3, 0.5)
                 for i, p in enumerate(points):
                     if i == 0:
                         device.touch(p[0], p[1] + self.dy, MonkeyDevice.DOWN)
                     elif i == len(points) - 1:
                         self.move(self.get_fix_point(
-                            points[i - 1]), self.get_fix_point(p), 0.5)
+                            points[i - 1]), self.get_fix_point(p), du)
                         device.touch(p[0], p[1] + self.dy, MonkeyDevice.UP)
                     else:
                         self.move(self.get_fix_point(
-                            points[i - 1]), self.get_fix_point(p), 0.5)
+                            points[i - 1]), self.get_fix_point(p), du)
             elif cmd == 'END':
                 device.touch(515, 1945 + self.dy, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)
                 device.touch(299, 1062 + self.dy, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)
                 for i in range(5):
-                    device.touch(1027, 2088 + self.dy,
+                    device.touch(1045, 1870 + self.dy,
                                  MonkeyDevice.DOWN_AND_UP)  # 有时候已经stage了
                     if self.feState() in [FeState.MY_TURN, FeState.CHAIN_10, FeState.CHAPTER]:
                         print 'action END match'
@@ -157,12 +166,13 @@ class WingDevice(object):
             self.wait_state(FeState.MY_TURN)
             self.startFe(allstep, False)
 
-    def loop_ghb(self, allstep, num=None):
+    def loop_ghb(self, allstep, num=None, level=FeLevel.LUNATIC):
         '''
-        全自动大英雄35，需要在章节列表页启动
+        全自动大英雄，需要在章节列表页启动
         :param allstep:
         :param num: 最大次数
         :param stam: 自动吃药
+        :param level: 难度
         :return:
         '''
         print '[loop_ghb] start'
@@ -175,18 +185,25 @@ class WingDevice(object):
             print '[loop_ghb] round', cnt
             self.wait_state(FeState.CHAPTER)
             # 点击30
-            self.device.touch(310, 1412 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            if level == FeLevel.HARD:
+                self.device.touch(310, 1412 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            elif level == FeLevel.LUNATIC:
+                self.device.touch(310, 1070 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            else:
+                raise Exception('not support such level')
             MonkeyRunner.sleep(1)
             self.device.touch(310, 1363 + self.dy,
                               MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
             MonkeyRunner.sleep(1)
 
-            self.wait_state(FeState.MY_TURN)
+            self.wait_state(FeState.MY_TURN, duration=random.uniform(1, 5))
             self.startFe(allstep, False)
 
-    def wait_state(self, state):
+    def wait_state(self, state, duration=0):
         while self.feState() != state:
             MonkeyRunner.sleep(1)
+        if duration > 0:
+            MonkeyRunner.sleep(duration)
 
     def feState(self, mImg=None):
         '''判定当前画面状态
