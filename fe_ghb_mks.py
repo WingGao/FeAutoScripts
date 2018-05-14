@@ -23,7 +23,7 @@ print 'GHB makusi'
 scriptStarttime = time.time()
 # time 2018-05-13 16:25:41.628000
 chap_mks = [
-    ## D:\Projs\FeAutoScripts\FeLaya/laya/pages/ghb/FeStage_mks.ui
+    # D:\Projs\FeAutoScripts\FeLaya/laya/pages/ghb/FeStage_mks.ui
     ['D', (448, 1766), (448, 1582)],
     ['D', (815, 1765), (630, 1585)],
     ['D', (268, 1764), (447, 1768)],
