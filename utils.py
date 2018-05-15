@@ -73,14 +73,14 @@ class WingDevice(object):
         for step in allstep:
             cmd = step[0]
             if cmd == 'D':
-                du = random.uniform(0.6, 1.2)
+                du = random.uniform(0.6, 1)
                 if len(step) == 4:
                     du = step[3]
                 device.drag(self.get_fix_point(
                     step[1]), self.get_fix_point(step[2]), du)
             elif cmd == 'T':
                 points = step[1:]
-                du = random.uniform(0.3, 0.5)
+                du = random.uniform(0.2, 0.3)
                 for i, p in enumerate(points):
                     if i == 0:
                         device.touch(p[0], p[1] + self.dy, MonkeyDevice.DOWN)
@@ -186,9 +186,11 @@ class WingDevice(object):
             self.wait_state(FeState.CHAPTER)
             # 点击30
             if level == FeLevel.HARD:
-                self.device.touch(310, 1412 + self.dy, MonkeyDevice.DOWN_AND_UP)
+                self.device.touch(310, 1412 + self.dy,
+                                  MonkeyDevice.DOWN_AND_UP)
             elif level == FeLevel.LUNATIC:
-                self.device.touch(310, 1070 + self.dy, MonkeyDevice.DOWN_AND_UP)
+                self.device.touch(310, 1070 + self.dy,
+                                  MonkeyDevice.DOWN_AND_UP)
             else:
                 raise Exception('not support such level')
             MonkeyRunner.sleep(1)
