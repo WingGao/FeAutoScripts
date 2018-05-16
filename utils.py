@@ -74,10 +74,11 @@ class WingDevice(object):
             cmd = step[0]
             if cmd == 'D':
                 du = random.uniform(0.6, 1)
-                if len(step) == 4:
-                    du = step[3]
+
                 device.drag(self.get_fix_point(
                     step[1]), self.get_fix_point(step[2]), du)
+                if len(step) == 4:
+                    MonkeyRunner.sleep(step[3])
             elif cmd == 'T':
                 points = step[1:]
                 du = random.uniform(0.2, 0.3)

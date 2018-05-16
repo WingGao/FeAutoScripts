@@ -169,7 +169,7 @@ def parse_file(f):
 
 result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
-ghl_list = ['_cy', '_am', '_mks', '_jfw', '_nbe']
+ghl_list = ['_cy', '_am', '_mks', '_jfw', '_nbe', '_lfl']
 for fid in ghl_list:
     if isinstance(fid, int):
         layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)),
