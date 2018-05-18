@@ -184,7 +184,7 @@ class WingDevice(object):
                 return
             cnt += 1
             print '[loop_ghb] round', cnt
-            self.wait_state(FeState.CHAPTER)
+            self.wait_state(FeState.CHAPTER, check_btn=True)
             # 点击30
             if level == FeLevel.HARD:
                 self.device.touch(310, 1412 + self.dy,
@@ -202,15 +202,16 @@ class WingDevice(object):
             self.wait_state(FeState.MY_TURN, duration=random.uniform(1, 5))
             self.startFe(allstep, False)
 
-    def wait_state(self, state, duration=0):
-        while self.feState() != state:
+    def wait_state(self, state, duration=0, check_btn=False):
+        while self.feState(check_btn=check_btn) != state:
             MonkeyRunner.sleep(1)
         if duration > 0:
             MonkeyRunner.sleep(duration)
 
-    def feState(self, mImg=None):
+    def feState(self, mImg=None, check_btn=False):
         '''判定当前画面状态
         :param mImg: MonkeyImage
+        :param check_btn: 检查是否有按钮
         :return: FeState
         '''
         if mImg is None:
@@ -236,16 +237,70 @@ class WingDevice(object):
         elif argbSame(mImg.getRawPixel(313, 1191 + self.dy), (-1, 63, 89, 74)):  # 回复体力成功，关闭
             print 'stamina full success'
             self.device.touch(313, 1191 + self.dy, MonkeyDevice.DOWN_AND_UP)
+        elif check_btn:
+            self.fe_state_has_btn(mImg)
 
         return FeState.UNKNOWN
 
-    def test(self):
-        print self.device.getProperty('display.width')
-        print self.device.getProperty('display.height')
-        print self.device.getProperty('display.density')
-        print 'feState', self.feState()
+    def fe_state_has_btn(self, img):
+        btn_colors = [
+            (-1, 42, 97, 72),
+            (-1, 40, 97, 72),
+            (-1, 40, 98, 71),
+            (-1, 41, 101, 72),
+            (-1, 40, 102, 73),
+            (-1, 40, 104, 73),
+            (-1, 41, 106, 73),
+            (-1, 40, 107, 74),
+            (-1, 41, 109, 75),
+            (-1, 40, 110, 75),
+            (-1, 41, 112, 75),
+            (-1, 41, 115, 75),
+            (-1, 42, 116, 77),
+            (-1, 44, 119, 79),
+            (-1, 44, 122, 80),
+            (-1, 46, 125, 82),
+            (-1, 48, 127, 83),
+            (-1, 51, 131, 87),
+            (-1, 54, 135, 90),
+            (-1, 57, 138, 92),
+            (-1, 61, 142, 96),
+            (-1, 65, 146, 99),
+            (-1, 68, 151, 103),
+            (-1, 73, 156, 107),
+            (-1, 77, 159, 111),
+            (-1, 83, 165, 116),
+            (-1, 88, 169, 121),
+            (-1, 92, 173, 124),
+            (-1, 98, 178, 130),
+            (-1, 103, 182, 134),
+            (-1, 109, 186, 139),
+            (-1, 114, 189, 143),
+            (-1, 120, 194, 148),
+            (-1, 125, 198, 152),
+            (-1, 131, 202, 157),
+            (-1, 135, 206, 161),
+        ]
         for i in range(100):
-            print 'feState', self.feState()
-            mImg = self.device.takeSnapshot()
-            print mImg.getRawPixel(800, 183 + self.dy)
-            MonkeyRunner.sleep(0.3)
+            has_btn = 0
+            for j, p in enumerate(btn_colors):
+                if argbSame(img.getRawPixel(320, 1380 + i + j + self.dy), p):
+                    has_btn += 1
+            # 说明有一个关闭按钮
+            if has_btn >= len(btn_colors) * 0.75:
+                y = 1380 + i + self.dy
+                print 'find ok btn', 320, y
+                self.device.touch(320, y, MonkeyDevice.DOWN_AND_UP)
+                MonkeyRunner.sleep(0.5)
+                return
+
+
+def test(self):
+    print self.device.getProperty('display.width')
+    print self.device.getProperty('display.height')
+    print self.device.getProperty('display.density')
+    print 'feState', self.feState(check_btn=False)
+
+    # mImg = self.device.takeSnapshot()
+    # for i in range(36):
+    #     print mImg.getRawPixel(320, 1430 + i)
