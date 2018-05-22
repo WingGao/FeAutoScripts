@@ -216,29 +216,35 @@ class WingDevice(object):
         '''
         if mImg is None:
             mImg = self.device.takeSnapshot()
-        wxfw = mImg.getRawPixel(280, 1985 + self.dy)  # 通过 危险范围 来判定
-        if argbSame(wxfw, (-1, 169, 61, 85)):  # 正常,我的回合 (-1, 169, 61, 85)
-            return FeState.MY_TURN
-        elif argbSame(wxfw, (-1, 85, 31, 43)):
-            # 敌人 (-1, 85, 31, 43)
-            # 弹窗 (-1, 84, 30, 42)
-            return FeState.ENEMY_TURN
-        elif argbSame(mImg.getRawPixel(648, 837 + self.dy), (-1, 202, 39, 69)):  # 10连界面
-            return FeState.CHAIN_10
-        elif argbSame(mImg.getRawPixel(143, 350 + self.dy), (-1, 0, 132, 193)):  # 章节页面，通过队伍编号
-            return FeState.CHAPTER
-        elif argbSame(mImg.getRawPixel(800, 183 + self.dy), (-1, 71, 33, 39)):  # 跳过按钮
-            print 'FEH get skip'
-            self.device.touch(800, 183 + self.dy, MonkeyDevice.DOWN_AND_UP)
-            MonkeyRunner.sleep(1)
-        elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 55, 83, 72)):  # 错误803-3101
-            print 'FEH get an error'
-            self.device.touch(267, 1123 + self.dy, MonkeyDevice.DOWN_AND_UP)
-        elif argbSame(mImg.getRawPixel(313, 1191 + self.dy), (-1, 63, 89, 74)):  # 回复体力成功，关闭
-            print 'stamina full success'
-            self.device.touch(313, 1191 + self.dy, MonkeyDevice.DOWN_AND_UP)
-        elif check_btn:
-            self.fe_state_has_btn(mImg)
+        try:
+            wxfw = mImg.getRawPixel(280, 1985 + self.dy)  # 通过 危险范围 来判定
+            if argbSame(wxfw, (-1, 169, 61, 85)):  # 正常,我的回合 (-1, 169, 61, 85)
+                return FeState.MY_TURN
+            elif argbSame(wxfw, (-1, 85, 31, 43)):
+                # 敌人 (-1, 85, 31, 43)
+                # 弹窗 (-1, 84, 30, 42)
+                return FeState.ENEMY_TURN
+            elif argbSame(mImg.getRawPixel(648, 837 + self.dy), (-1, 202, 39, 69)):  # 10连界面
+                return FeState.CHAIN_10
+            elif argbSame(mImg.getRawPixel(143, 350 + self.dy), (-1, 0, 132, 193)):  # 章节页面，通过队伍编号
+                return FeState.CHAPTER
+            elif argbSame(mImg.getRawPixel(800, 183 + self.dy), (-1, 71, 33, 39)):  # 跳过按钮
+                print 'FEH get skip'
+                self.device.touch(800, 183 + self.dy, MonkeyDevice.DOWN_AND_UP)
+                MonkeyRunner.sleep(1)
+            elif argbSame(mImg.getRawPixel(267, 1123 + self.dy), (-1, 55, 83, 72)):  # 错误803-3101
+                # TODO 添加断线重连
+                print 'FEH get an error'
+                self.device.touch(267, 1123 + self.dy,
+                                  MonkeyDevice.DOWN_AND_UP)
+            elif argbSame(mImg.getRawPixel(313, 1191 + self.dy), (-1, 63, 89, 74)):  # 回复体力成功，关闭
+                print 'stamina full success'
+                self.device.touch(313, 1191 + self.dy,
+                                  MonkeyDevice.DOWN_AND_UP)
+            elif check_btn:
+                self.fe_state_has_btn(mImg)
+        except Exception, e:
+            print 'error on feState', e
 
         return FeState.UNKNOWN
 
