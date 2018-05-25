@@ -1,7 +1,6 @@
 {
     "type":"View",
     "selectedBox":1,
-    "selecteID":2,
     "props":{"width":1080,"sceneColor":"#000000","height":2160},
     "nodeParent":-1,
     "label":"View",
@@ -567,28 +566,6 @@
                                 "tween":true,
                                 "target":16,
                                 "key":"x",
-                                "index":30
-                            }]
-                    }
-                },
-                {
-                    "target":2,
-                    "keyframes":{
-                        "skin":[
-                            {
-                                "value":"ghb_mxy.jpg",
-                                "tweenMethod":"linearNone",
-                                "tween":false,
-                                "target":2,
-                                "key":"skin",
-                                "index":0
-                            },
-                            {
-                                "value":"ghb_mxe.jpg",
-                                "tweenMethod":"linearNone",
-                                "tween":false,
-                                "target":2,
-                                "key":"skin",
                                 "index":30
                             }]
                     }
