@@ -21,8 +21,8 @@ scriptStarttime = time.time()
 chap_kln = [
     # /Users/suamo/Projs/FeAutoScripts/FeLaya/laya/pages/ghb/FeStage_kln.ui
     ['D', (630, 1586), (446, 1408)],
-    ['D', (992, 1405), (812, 1409), 1],
-    ['D', (628, 1406), (450, 1040)],
+    ['D', (992, 1405), (812, 1409), 2],
+    ['D', (450, 1406), (450, 1040)],
     ['END'],
     ['T', (447, 1220), (267, 1229), (267, 1046)],
     ['END'],
