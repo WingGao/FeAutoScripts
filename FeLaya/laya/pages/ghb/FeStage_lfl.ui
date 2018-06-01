@@ -243,14 +243,6 @@
                                 "target":3,
                                 "key":"y",
                                 "index":12
-                            },
-                            {
-                                "value":784,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":3,
-                                "key":"y",
-                                "index":17
                             }],
                         "x":[
                             {
@@ -313,6 +305,14 @@
                                 "target":10,
                                 "key":"y",
                                 "index":0
+                            },
+                            {
+                                "value":786,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":10,
+                                "key":"y",
+                                "index":17
                             }],
                         "x":[
                             {
@@ -322,6 +322,14 @@
                                 "target":10,
                                 "key":"x",
                                 "index":0
+                            },
+                            {
+                                "value":366,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":10,
+                                "key":"x",
+                                "index":17
                             }]
                     }
                 },

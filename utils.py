@@ -2,6 +2,7 @@
 from com.android.monkeyrunner import MonkeyRunner, MonkeyDevice
 import sys
 import random
+import datetime
 
 
 def argbSame(argb, argb2, rate=5):
@@ -70,7 +71,9 @@ class WingDevice(object):
     def startFe(self, allstep, can_exit=True):
         device = self.device
 
-        for step in allstep:
+        for stepIdx, step in enumerate(allstep):
+            print '[%s][%i/%i] %r' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
+                                      stepIdx+1, len(allstep), step)
             cmd = step[0]
             if cmd == 'D':
                 du = random.uniform(0.6, 1)
@@ -97,10 +100,10 @@ class WingDevice(object):
                 MonkeyRunner.sleep(1)
                 device.touch(299, 1062 + self.dy, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)
-                for i in range(5):
+                while True:
                     device.touch(1045, 1870 + self.dy,
                                  MonkeyDevice.DOWN_AND_UP)  # 有时候已经stage了
-                    if self.feState() in [FeState.MY_TURN, FeState.CHAIN_10, FeState.CHAPTER]:
+                    if self.feState(check_btn=True) in [FeState.MY_TURN, FeState.CHAIN_10, FeState.CHAPTER]:
                         print 'action END match'
                         break
                     else:
@@ -202,8 +205,13 @@ class WingDevice(object):
             self.wait_state(FeState.MY_TURN, duration=random.uniform(1, 5))
             self.startFe(allstep, False)
 
-    def wait_state(self, state, duration=0, check_btn=False):
-        while self.feState(check_btn=check_btn) != state:
+    def wait_state(self, state_or_list, duration=0, check_btn=False):
+        while True:
+            cs = self.feState(check_btn=check_btn)
+            if isinstance(state_or_list, list) and cs in state_or_list:
+                break
+            elif cs == state_or_list:
+                break
             MonkeyRunner.sleep(1)
         if duration > 0:
             MonkeyRunner.sleep(duration)
