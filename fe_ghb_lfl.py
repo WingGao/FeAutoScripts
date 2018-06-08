@@ -26,11 +26,14 @@ chap_lfl = [
     # /Users/suamo/Projs/FeAutoScripts/FeLaya/laya/pages/ghb/FeStage_lfl.ui
     ['D', (88, 867), (270, 1053)],
     ['D', (98, 1215), (92, 1051)],
+    ['D', (95, 1409), (89, 1228)],
+    ['D', (89, 680), (91, 872)],
     ['END'],
     ['D', (270, 1053), (459, 1056)],
     ['D', (92, 1051), (278, 1057)],
+    ['D', (91, 872), (90, 1049)],
     ['END'],
-    ['D', (89, 680), (456, 876)],
+    ['D', (90, 1049), (456, 876)],
     ['D', (278, 1057), (645, 1218)],
     ['END'],
     # ['STAGE'],
@@ -44,4 +47,4 @@ end = [
 allstep = chap_lfl + end
 
 wd = WingDevice(device)
-wd.loop_ghb(allstep)
+wd.loop_ghb(allstep)  # 134场
