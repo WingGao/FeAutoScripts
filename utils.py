@@ -28,12 +28,13 @@ class FeLevel(object):
 
 
 class WingDevice(object):
-    def __init__(self, device):
+    def __init__(self, device, debug=False):
         self.device = device
         self.width = int(self.device.getProperty('display.width'))
         self.height = int(self.device.getProperty('display.height'))
         self.dx = 0
         self.dy = 0  # 偏移修正
+        self._debug = True
 
         if self.width == 1080 and self.height >= 1920:
             if self.height != 2040:  # 2040是全面屏的尺寸，特别奇怪，不是2160
@@ -41,6 +42,13 @@ class WingDevice(object):
         else:
             raise Exception('not support w=%i h=%i' %
                             (self.width, self.height))
+        self.dy += 72 / 2  # 导航栏
+        self.debug('dy=%d' % self.dy)
+
+    def debug(self, *args):
+        if self._debug:
+            print args
+        return True
 
     def get_fix_point(self, point):
         np = (point[0], point[1] + self.dy)
@@ -73,7 +81,7 @@ class WingDevice(object):
 
         for stepIdx, step in enumerate(allstep):
             print '[%s][%i/%i] %r' % (datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
-                                      stepIdx+1, len(allstep), step)
+                                      stepIdx + 1, len(allstep), step)
             cmd = step[0]
             if cmd == 'D':
                 du = random.uniform(0.6, 1)
@@ -226,7 +234,9 @@ class WingDevice(object):
             mImg = self.device.takeSnapshot()
         try:
             wxfw = mImg.getRawPixel(280, 1985 + self.dy)  # 通过 危险范围 来判定
+            self.debug('[feState] MY_TURN val %r' % (wxfw,))
             if argbSame(wxfw, (-1, 169, 61, 85)):  # 正常,我的回合 (-1, 169, 61, 85)
+                self.debug('[feState] MY_TURN ok')
                 return FeState.MY_TURN
             elif argbSame(wxfw, (-1, 85, 31, 43)):
                 # 敌人 (-1, 85, 31, 43)
@@ -308,13 +318,22 @@ class WingDevice(object):
                 MonkeyRunner.sleep(0.5)
                 return
 
-
-def test(self):
-    print self.device.getProperty('display.width')
-    print self.device.getProperty('display.height')
-    print self.device.getProperty('display.density')
-    print 'feState', self.feState(check_btn=False)
-
-    # mImg = self.device.takeSnapshot()
-    # for i in range(36):
-    #     print mImg.getRawPixel(320, 1430 + i)
+    def test(self):
+        print self.device.getProperty('display.width')
+        print self.device.getProperty('display.height')
+        print self.device.getProperty('display.density')
+        print 'feState', self.feState(check_btn=False)
+        mImg = self.device.takeSnapshot()
+        print 'feState chapter', mImg.getRawPixel(143, 350 + self.dy)  # (-1, 0, 132, 193)):  # 章节页面，通过队伍编号
+        # print mImg.getRawPixel(143, 350 + self.dy)
+        step = 50
+        for i in range(step):
+            y = 1985 + i - step / 2
+            # for j in range(step):
+            #     x = 143 + j - step / 2
+            x = 280
+            px = mImg.getRawPixel(x, y + self.dy)
+            print x, y, px
+            if argbSame(px, (-1, 169, 61, 85)):
+                print '==>', x, y
+        # print mImg.getRawPixel(320, 1430 + i)
