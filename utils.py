@@ -34,15 +34,16 @@ class WingDevice(object):
         self.height = int(self.device.getProperty('display.height'))
         self.dx = 0
         self.dy = 0  # 偏移修正
-        self._debug = True
+        self._debug = debug
 
         if self.width == 1080 and self.height >= 1920:
             if self.height != 2040:  # 2040是全面屏的尺寸，特别奇怪，不是2160
                 self.dy = (self.height - 2160) / 2  # 因为是拿mate写的脚本
+            else:
+                self.dy += 72 / 2  # 导航栏
         else:
             raise Exception('not support w=%i h=%i' %
                             (self.width, self.height))
-        self.dy += 72 / 2  # 导航栏
         self.debug('dy=%d' % self.dy)
 
     def debug(self, *args):
