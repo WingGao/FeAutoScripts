@@ -292,20 +292,12 @@
                                 "index":0
                             },
                             {
-                                "value":1499,
+                                "value":1324,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":10,
                                 "key":"y",
                                 "index":6
-                            },
-                            {
-                                "value":1319,
-                                "tweenMethod":"linearNone",
-                                "tween":true,
-                                "target":10,
-                                "key":"y",
-                                "index":12
                             },
                             {
                                 "value":1139,
@@ -360,7 +352,15 @@
                                 "tween":true,
                                 "target":7,
                                 "key":"y",
-                                "index":17
+                                "index":18
+                            },
+                            {
+                                "value":1497,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":7,
+                                "key":"y",
+                                "index":23
                             }],
                         "x":[
                             {
@@ -372,12 +372,20 @@
                                 "index":0
                             },
                             {
-                                "value":185,
+                                "value":718,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":7,
                                 "key":"x",
-                                "index":17
+                                "index":18
+                            },
+                            {
+                                "value":721,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":7,
+                                "key":"x",
+                                "index":23
                             }]
                     }
                 },
@@ -394,7 +402,15 @@
                                 "index":0
                             },
                             {
-                                "value":1485,
+                                "value":1680,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"y",
+                                "index":17
+                            },
+                            {
+                                "value":1497,
                                 "tweenMethod":"linearNone",
                                 "tween":true,
                                 "target":13,
@@ -409,6 +425,22 @@
                                 "target":13,
                                 "key":"x",
                                 "index":0
+                            },
+                            {
+                                "value":900,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"x",
+                                "index":17
+                            },
+                            {
+                                "value":724,
+                                "tweenMethod":"linearNone",
+                                "tween":true,
+                                "target":13,
+                                "key":"x",
+                                "index":22
                             }]
                     }
                 },
