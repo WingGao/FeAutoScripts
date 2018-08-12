@@ -267,63 +267,70 @@ class WingDevice(object):
 
         return FeState.UNKNOWN
 
-    def fe_state_has_btn(self, img):
+    def fe_state_has_btn(self, img=None, touch=True):
+        if img is None:
+            img = self.device.takeSnapshot()
+            # step = 3
         btn_colors = [
-            (-1, 42, 97, 72),
-            (-1, 40, 97, 72),
-            (-1, 40, 98, 71),
-            (-1, 41, 101, 72),
-            (-1, 40, 102, 73),
-            (-1, 40, 104, 73),
-            (-1, 41, 106, 73),
-            (-1, 40, 107, 74),
-            (-1, 41, 109, 75),
-            (-1, 40, 110, 75),
-            (-1, 41, 112, 75),
-            (-1, 41, 115, 75),
-            (-1, 42, 116, 77),
-            (-1, 44, 119, 79),
-            (-1, 44, 122, 80),
-            (-1, 46, 125, 82),
-            (-1, 48, 127, 83),
-            (-1, 51, 131, 87),
-            (-1, 54, 135, 90),
-            (-1, 57, 138, 92),
-            (-1, 61, 142, 96),
-            (-1, 65, 146, 99),
-            (-1, 68, 151, 103),
-            (-1, 73, 156, 107),
-            (-1, 77, 159, 111),
-            (-1, 83, 165, 116),
-            (-1, 88, 169, 121),
-            (-1, 92, 173, 124),
-            (-1, 98, 178, 130),
-            (-1, 103, 182, 134),
-            (-1, 109, 186, 139),
-            (-1, 114, 189, 143),
-            (-1, 120, 194, 148),
-            (-1, 125, 198, 152),
-            (-1, 131, 202, 157),
-            (-1, 135, 206, 161),
+            (-1, 77, 124, 98),
+            (-1, 77, 117, 94),
+            (-1, 75, 110, 89),
+            (-1, 74, 106, 86),
+            (-1, 72, 101, 83),
+            (-1, 71, 97, 80),
+            (-1, 69, 94, 77),
+            (-1, 68, 91, 75),
+            (-1, 67, 89, 72),
+            (-1, 64, 88, 71),
+            (-1, 62, 87, 71),
+            (-1, 60, 88, 70),
+            (-1, 59, 89, 70),
+            (-1, 55, 91, 69),
+            (-1, 52, 94, 69),
+            (-1, 49, 97, 69),
+            (-1, 48, 103, 70),
+            (-1, 47, 107, 71),
+            (-1, 46, 112, 73),
+            (-1, 49, 120, 77),
+            (-1, 52, 127, 82),
+            (-1, 61, 139, 91),
+            (-1, 71, 152, 102),
+            (-1, 85, 165, 116),
+            (-1, 99, 178, 130),
         ]
-        for i in range(100):
+        # 1380 - 1900
+        for i in range(1380, 1900, 1):
+            py = i + self.dy
             has_btn = 0
+
+            # self.debug('[fe_state_has_btn] y=%i color=%r' % (i, img.getRawPixel(320, i + self.dy)))
             for j, p in enumerate(btn_colors):
-                if argbSame(img.getRawPixel(320, 1380 + i + j + self.dy), p):
+                if argbSame(img.getRawPixel(320, py + j * 3), p):
                     has_btn += 1
+            self.debug('[fe_state_has_btn] y=%i has_btn=%i' % (i, has_btn))
             # 说明有一个关闭按钮
             if has_btn >= len(btn_colors) * 0.75:
-                y = 1380 + i + self.dy
-                print 'find ok btn', 320, y
-                self.device.touch(320, y, MonkeyDevice.DOWN_AND_UP)
-                MonkeyRunner.sleep(0.5)
+                print 'find ok btn', 320, py
+                if touch:
+                    self.device.touch(320, py, MonkeyDevice.DOWN_AND_UP)
+                    MonkeyRunner.sleep(0.5)
                 return
+
+    def get_ok_btn(self):
+        img = self.device.takeSnapshot()
+        x = 320
+        for i in range(1625, 1700, 3):
+            print img.getRawPixel(x, i)
+
+        # for i in range(250, 320, 1):
+        #     print img.getRawPixel(x, 1625)
 
     def test(self):
         print self.device.getProperty('display.width')
         print self.device.getProperty('display.height')
         print self.device.getProperty('display.density')
         print 'feState', self.feState(check_btn=False)
+        self.fe_state_has_btn()
         mImg = self.device.takeSnapshot()
         print 'feState chapter', mImg.getRawPixel(143, 350 + self.dy)  # (-1, 0, 132, 193)):  # 章节页面，通过队伍编号
         # print mImg.getRawPixel(143, 350 + self.dy)

@@ -13,3 +13,7 @@ from utils import WingDevice
 device = MonkeyRunner.waitForConnection()
 wd = WingDevice(device, debug=True)
 wd.test()
+# wd.get_ok_btn()
+
+def test_task_ok():
+    pass
