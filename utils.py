@@ -134,6 +134,15 @@ class WingDevice(object):
                         break
                     else:
                         MonkeyRunner.sleep(2)
+            elif cmd == 'AUTO':
+                print 'click auto'
+                # 自动战斗
+                self.device.touch(120, 1975 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 设置
+                MonkeyRunner.sleep(0.5)
+                self.device.touch(300, 1250 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 自动
+                MonkeyRunner.sleep(0.5)
+                self.device.touch(300, 1100 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 确定
+                MonkeyRunner.sleep(5)
 
             elif cmd == 'PREPARE':
                 device.touch(726, 1955 + self.dy, MonkeyDevice.DOWN_AND_UP)
@@ -178,6 +187,39 @@ class WingDevice(object):
 
             self.wait_state(FeState.MY_TURN)
             self.startFe(allstep, False)
+
+    def loop_dyz(self, num=None, level=FeLevel.INFERNAL):
+        '''
+                全自动大压制战，需要在章节列表页启动
+                :param num: 最大次数
+                :param level: 难度
+                :return:
+                '''
+        print '[loop_dyz] start'
+        cnt = 0
+        print ''
+        while True:
+            if num is not None and cnt >= num:  # 最大次数
+                return
+            cnt += 1
+            print '[loop_dyz] round', cnt
+            self.wait_state(FeState.CHAPTER, check_btn=True)
+            if level == FeLevel.LUNATIC:
+                self.device.touch(310, 1070 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            elif level == FeLevel.INFERNAL:
+                self.device.touch(310, 735 + self.dy, MonkeyDevice.DOWN_AND_UP)
+            else:
+                raise Exception('not support such level')
+            MonkeyRunner.sleep(1)
+            self.device.touch(310, 1630 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 开始战斗
+            MonkeyRunner.sleep(1)
+
+            self.wait_state(FeState.MY_TURN, duration=random.uniform(1, 5))
+            self.startFe([['AUTO'], ['END']], False)
+            # 结算
+            self.wait_state(FeState.CHAPTER, check_btn=True)
+            self.device.touch(310, 1825 + self.dy, MonkeyDevice.DOWN_AND_UP)  # 点击 确定
+            MonkeyRunner.sleep(1)
 
     def loop_ghb(self, allstep, num=None, level=FeLevel.LUNATIC):
         '''
