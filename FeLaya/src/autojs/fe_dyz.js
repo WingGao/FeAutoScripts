@@ -8,6 +8,12 @@ const FeState = {
     CHAPTER: 4, //章节页面
     UNKNOWN: 100
 }
+const FeLeve = {
+    NORMAL: 0,
+    HARD: 1,
+    LUNATIC: 2,
+    INFERNAL: 3,
+}
 
 function initEnv() {
     toast(device.width + 'x' + device.height)
@@ -106,13 +112,20 @@ function updateInfo(msg) {
     ui.run(() => MFW.feText.setText(msg))
 }
 
-function loop_dyz() {
+function loop_dyz(level) {
     let cnt = 0;
     while (true) {
         cnt += 1
         updateInfo("dyz round " + cnt)
         // 地狱
-        click(310, 735 + FE_DY)
+        if (level == FeLeve.INFERNAL) {
+            click(310, 735 + FE_DY)
+        } else if (level == FeLeve.LUNATIC) {
+            click(320, 1065 + FE_DY)
+        } else {
+            toast("no such level")
+            return exit()
+        }
         sleep(2000)
         click(310, 1630 + FE_DY)
         sleep(1000)
@@ -130,4 +143,4 @@ function test() {
 
 initEnv()
 check_app()
-loop_dyz()
+loop_dyz(FeLeve.LUNATIC)
