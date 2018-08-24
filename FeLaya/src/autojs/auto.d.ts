@@ -5,6 +5,11 @@ function sleep(ms: number);
 function toast(msg: string);
 
 function exit();
+
+interface Point {
+    x: number;
+    y: number;
+}
 //app
 interface Intent {
     action: string;//android.intent.action.
@@ -41,7 +46,7 @@ class colors {
      * @param green
      * @param blue
      */
-    static argb(alpha, red, green, blue)
+    static argb(alpha, red, green, blue);
 
     /**
      *
@@ -50,13 +55,13 @@ class colors {
      * @param threshold  颜色相似度临界值，默认为4。取值范围为0~255。这个值越大表示允许的相似程度越小，如果这个值为0，则两个颜色相等时该函数才会返回true。
      * @param algorithm
      */
-    static isSimilar(color1: Color, color2: Color, threshold?: number, algorithm?): boolean
+    static isSimilar(color1: Color, color2: Color, threshold?: number, algorithm?): boolean;
+    static toString(color: Color): string;
 }
 class device {
     static width: number;
     static height: number;
 }
-
 namespace ui {
     function run(cb: Function);//Android的runOnUiThread
 }
