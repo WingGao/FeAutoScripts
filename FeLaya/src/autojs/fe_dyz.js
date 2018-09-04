@@ -2,8 +2,10 @@ setTimeout(() => {
     // check_app()
     // loop_dyz(FeLeve.LUNATIC)
     // showFeInfo()
-    loop_enemyturn()
-}, 200)
+    loop_fe(chap_km_j) //卡谬练级
+    // startFe(chap_km)
+    // loop_enemyturn()
+}, 1000)
 // setInterval(() => {
 //     exit()
 // }, 3000)
@@ -24,17 +26,19 @@ const FeLeve = {
     LUNATIC: 2,
     INFERNAL: 3,
 }
-const P_SAFE = { x: 1050, y: 180 } //安全点
+const P_SAFE = { x: 1070, y: 1920 } //安全点
 const P_TEAM = { x: 175, y: 420, color: '#00669c' } //小队
 const P_TURN = { x: 260, y: 2045, color: '#db86a4' } //危险范围
+const P_SKIP = { x: 800, y: 220, color: '#482128' } //跳过
 
 function initEnv() {
-    toast(device.width + 'x' + device.height)
+
     if (device.height >= 2040) {
         // FE_DY = 72 / 2
     } else {
-        FE_DY = (device.height - 2160) / 2
+        FE_DY = (device.height - (2160 - 72)) / 2 - 72
     }
+    toast(device.width + 'x' + device.height + ', dy=' + FE_DY)
 }
 /**
  * 点击，自动计算偏移
@@ -64,10 +68,31 @@ function getColor(img, xOrPoint, y) {
 }
 
 function startFe(steps, can_exit) {
+    const get_fix_point = (p) => {
+        return [p[0], p[1] + FE_DY]
+    }
     for (let i = 0; i < steps.length; i++) {
         let step = steps[i];
         let cmd = step[0]
+        console.log('step:', step)
         switch (cmd) {
+            case "D":
+                gesture(500, get_fix_point(step[1]), get_fix_point(step[2]))
+                sleep(700)
+                // gesture(500, [[step[1], step[2] + FE_DY], [step[3], step[4] + FE_DY]])
+                break
+            case "T":
+                gesture(500, get_fix_point(step[1]), get_fix_point(step[2]), get_fix_point(step[3]))
+                sleep(700)
+                break
+            case "RESTART": //重新挑战
+                click(120, 1975 + FE_DY)// 点击 设置
+                sleep(500)
+                click(300, 1330 + FE_DY)
+                sleep(500)
+                click(300, 1100 + FE_DY)// 点击 确定
+                sleep(5000)
+                break
             case "AUTO":
                 click(120, 1975 + FE_DY)// 点击 设置
                 sleep(500)
@@ -78,9 +103,9 @@ function startFe(steps, can_exit) {
                 break
             case "END":
                 click(515, 1945 + FE_DY)// 点击 设置
-                sleep(1000)
+                sleep(500)
                 click(299, 1062 + FE_DY)// 点击 设置
-                sleep(1000)
+                sleep(500)
                 while (true) {
                     click(1045, 1870 + FE_DY)// 有时候已经stage了
                     sleep(1000)
@@ -88,6 +113,10 @@ function startFe(steps, can_exit) {
                         break
                     }
                 }
+                break
+            case "WAIT":
+                wait_state(step[1], true)
+                break
 
         }
     }
@@ -95,12 +124,21 @@ function startFe(steps, can_exit) {
 
 function feState(check_btn) {
     let img = captureScreen();
+    let state = FeState.UNKNOWN
     if (colors.isSimilar(getColor(img, P_TURN), P_TURN.color)) {
-        return FeState.MY_TURN
+        state = FeState.MY_TURN
     } else if (colors.isSimilar(getColor(img, P_TEAM), P_TEAM.color)) {
-        return FeState.CHAPTER
+        state = FeState.CHAPTER
     }
-    return FeState.UNKNOWN
+    if (check_btn) {
+        if (colors.isSimilar(getColor(img, P_SKIP), P_SKIP.color)) {
+            wclick(P_SKIP);
+        } else {
+            wclick(P_SAFE)
+        }
+    }
+    console.log('feState', state)
+    return state
 }
 function wait_state(state_or_list, check_btn) {
     while (true) {
@@ -130,6 +168,7 @@ function showFeInfo() {
             <text id="pSafe" textSize="16sp" textColor="white" text="pSafe" w="100" />
             <text id="pTeam" textSize="16sp" textColor="white" text="pTeam" w="100" />
             <text id="pTurn" textSize="16sp" textColor="white" text="pTurn" w="100" />
+            <text id="pSkip" textSize="16sp" textColor="white" text="pSkip" w="100" />
         </vertical>
     )
     let img = captureScreen();
@@ -141,6 +180,9 @@ function showFeInfo() {
         let colorTurn = getColor(img, P_TURN)
         window.pTurn.setBackgroundColor(colorTurn)
         logInfo += "P_TURN " + colors.toString(colorTurn) + "\n"
+        let colorSkip = getColor(img, P_SKIP)
+        window.pTurn.setBackgroundColor(colorSkip)
+        logInfo += "P_SKIP " + colors.toString(colorSkip) + "\n"
     })
 
     logInfo += "feState " + feState()
@@ -212,6 +254,16 @@ function loop_dyz(level) {
         sleep(2000)
     }
 }
+function loop_fe(steps) {
+    showInfoView()
+    let cnt = 0;
+    while (true) {
+        cnt += 1
+        updateInfo("fe round " + cnt)
+        wait_state(FeState.MY_TURN, true)
+        startFe(steps)
+    }
+}
 // 自动加速敌人回合
 function loop_enemyturn() {
     showInfoView()
@@ -234,18 +286,29 @@ function loop_enemyturn() {
         }
     }
 }
-
-const chap_dyz = [
-    ['D', (341, 1693), (331, 1429)],
-    ['D', (200, 1686), (210, 1432)],
+// #region 练级步骤
+// 卡谬练级-远程
+const chap_km_y = [
+    ['D', [456, 1803], [451, 1438]],
+    ['D', [807, 1804], [452, 1799]],
     ['END'],
-    ['T', (331, 1429), (751, 1429), (616, 1424), (741, 1559), (756, 1429), (751, 1569), (876, 1694)],
-    ['D', (210, 1432), (614, 1427)],
-    ['D', (203, 1830), (880, 1690)],
-    ['D', (198, 1555), (880, 1697)],
-    ['END'],
-    ['STAGE'],
+    ['T', [268, 1804], [273, 1444], [443, 1259]],
+    ['D', [629, 1803], [449, 1258]],
+    ['WAIT', FeState.MY_TURN],
+    ['RESTART'],
 ]
+// 卡谬练级-近战
+const chap_km_j = [
+    ['D', [456, 1803], [451, 1438]],
+    ['D', [807, 1804], [452, 1799]],
+    ['END'],
+    ['T', [268, 1804], [273, 1444], [443, 1259]],
+    ['D', [451, 1438], [626, 1798]],
+    ['D', [631, 1621], [449, 1258]],
+    ['WAIT', FeState.MY_TURN],
+    ['RESTART'],
+]
+// #endregion
 
 function test() {
     toast(feState())

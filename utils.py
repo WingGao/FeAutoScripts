@@ -104,6 +104,8 @@ class WingDevice(object):
                     else:
                         self.move(self.get_fix_point(
                             points[i - 1]), self.get_fix_point(p), du)
+            elif cmd == 'RESET':
+                MonkeyRunner.sleep(1)
             elif cmd == 'END':
                 device.touch(515, 1945 + self.dy, MonkeyDevice.DOWN_AND_UP)
                 MonkeyRunner.sleep(1)

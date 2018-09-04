@@ -23,7 +23,8 @@
             "hasChild":false,
             "compId":14,
             "child":[
-                ]
+                ],
+            "$HIDDEN":true
         },
         {
             "x":15,
@@ -90,7 +91,7 @@
             "compId":18,
             "child":[
                 ],
-            "$HIDDEN":false
+            "$HIDDEN":true
         },
         {
             "x":15,
@@ -123,7 +124,7 @@
         {
             "x":15,
             "type":"Sprite",
-            "props":{"y":183,"x":800,"name":"对话"},
+            "props":{"y":220,"x":800,"name":"对话"},
             "nodeParent":1,
             "label":"Sprite(对话)",
             "isDirectory":false,
@@ -137,7 +138,7 @@
         {
             "x":15,
             "type":"Sprite",
-            "props":{"y":1871,"x":1046,"name":"安全区"},
+            "props":{"y":1920,"x":1070,"width":100,"name":"安全区","height":100},
             "nodeParent":1,
             "label":"Sprite(安全区)",
             "isDirectory":false,
@@ -146,6 +147,33 @@
             "compId":23,
             "child":[
                 ]
+        },
+        {
+            "x":15,
+            "type":"Image",
+            "props":{"skin":"ghb_dia_setting.jpg","name":"设置"},
+            "nodeParent":1,
+            "label":"Image(设置)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":24,
+            "child":[
+                ]
+        },
+        {
+            "x":15,
+            "type":"Sprite",
+            "props":{"y":1330,"x":300,"width":200,"name":"重新挑战","height":200},
+            "nodeParent":1,
+            "label":"Sprite(重新挑战)",
+            "isDirectory":false,
+            "isAniNode":true,
+            "hasChild":false,
+            "compId":25,
+            "child":[
+                ],
+            "$HIDDEN":true
         }],
     "animations":[
         {

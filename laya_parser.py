@@ -29,7 +29,7 @@ class Character(object):
         else:
             acts.append('T')
         for a in self.currentActions:
-            acts.append((a.x + 90, a.y + 90))
+            acts.append([a.x + 90, a.y + 90])
         self.currentActions = []
         return acts
 
@@ -104,6 +104,7 @@ def parse_file(f):
     chaIds = []
     chaEnd = None
     chaPre = None
+    chaReset = Character('reset', -1)
     for cha in character_dict.values():
         if cha.name in names:
             chaIds.append(cha.id)
@@ -111,6 +112,8 @@ def parse_file(f):
             chaEnd = cha
         elif cha.name == 'prepare':
             chaPre = cha
+        elif cha.name == 'reset':
+            chaReset = cha
 
     chaSeqs = []
 
@@ -152,6 +155,16 @@ def parse_file(f):
             setCharPos(i)  # 重置状态
             i += 1
 
+        if chaReset.actions.get(i) is not None:
+            # 重置，比如跳舞
+            for cha in chaSeqs:
+                steps.append(cha.end_action())
+            steps.append(['RESET'])
+            chaSeqs = []
+            i += 1
+            setCharPos(i)  # 重置状态
+            i += 1
+
         for id in chaIds:
             cha = character_dict[id]
             act = cha.actions.get(i)
@@ -169,7 +182,8 @@ def parse_file(f):
 
 result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
-ghl_list = ['_cy', '_am', '_mks', '_jfw', '_nbe', '_lfl', '_kln', '_lyd', '_mxe','_dyz']
+ghl_list = ['_cy', '_am', '_mks', '_jfw', '_nbe', '_lfl', '_kln', '_lyd', '_mxe', '_km', '_dyz', '_test']
+# ghl_list = ['_test']
 for fid in ghl_list:
     if isinstance(fid, int):
         layaf = os.path.join(os.path.dirname(os.path.realpath(__file__)),

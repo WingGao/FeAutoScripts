@@ -1,5 +1,7 @@
 function click(x: number, y: number);
 
+function gesture(duration: number, ...points);
+
 function sleep(ms: number);
 
 function toast(msg: string);
