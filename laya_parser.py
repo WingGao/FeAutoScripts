@@ -182,7 +182,7 @@ def parse_file(f):
 
 result_file = open('out.txt', 'w')
 result_file.write('# time %s\n' % datetime.datetime.now())
-ghl_list = ['_cy', '_am', '_mks', '_jfw', '_nbe', '_lfl', '_kln', '_lyd', '_mxe', '_km', '_dyz', '_test']
+ghl_list = ['_cy', '_am', '_mks', '_jfw', '_nbe', '_lfl', '_kln', '_lyd', '_mxe', '_km','_ll', '_dyz', '_test']
 # ghl_list = ['_test']
 for fid in ghl_list:
     if isinstance(fid, int):

@@ -2,7 +2,8 @@ setTimeout(() => {
     // check_app()
     // loop_dyz(FeLeve.LUNATIC)
     // showFeInfo()
-    loop_fe(chap_km_j) //卡谬练级
+    // loop_fe(chap_km_j) //周二卡谬练级
+    loop_fe(chap_ll_j) //周三罗罗练级
     // startFe(chap_km)
     // loop_enemyturn()
 }, 1000)
@@ -86,6 +87,7 @@ function startFe(steps, can_exit) {
                 sleep(700)
                 break
             case "RESTART": //重新挑战
+                wait_state(FeState.MY_TURN, true)
                 click(120, 1975 + FE_DY)// 点击 设置
                 sleep(500)
                 click(300, 1330 + FE_DY)
@@ -148,7 +150,7 @@ function wait_state(state_or_list, check_btn) {
         } else if (state_or_list == state) {
             break
         }
-        sleep(2000)
+        sleep(1000)
     }
 }
 function hexToARGB(hex) {
@@ -306,6 +308,30 @@ const chap_km_j = [
     ['D', [451, 1438], [626, 1798]],
     ['D', [631, 1621], [449, 1258]],
     ['WAIT', FeState.MY_TURN],
+    ['RESTART'],
+]
+// 罗罗-近战
+const chap_ll_j = [
+    ['D', [451, 1626], [85, 1630]],
+    ['D', [452, 1808], [89, 1808]],
+    ['D', [637, 1619], [269, 1631]],
+    ['END'],
+    ['D', [269, 1631], [85, 1448]],
+    ['D', [85, 1630], [269, 1806]],
+    ['D', [631, 1803], [271, 1807]], //治疗
+    ['WAIT', FeState.MY_TURN],
+    ['D', [89, 1808], [77, 1443]],
+    ['RESTART'],
+]
+// 罗罗-远程
+const chap_ll_y = [
+    ['D', [451, 1626], [85, 1630]],
+    ['D', [452, 1808], [89, 1808]],
+    ['D', [637, 1619], [269, 1631]],
+    ['END'],
+    ['D', [269, 1631], [85, 1448]],
+    // ['D', [85, 1630], [269, 1806]],
+    ['D', [89, 1808], [77, 1443]],
     ['RESTART'],
 ]
 // #endregion
