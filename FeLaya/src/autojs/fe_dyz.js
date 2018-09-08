@@ -3,7 +3,8 @@ setTimeout(() => {
     // loop_dyz(FeLeve.LUNATIC)
     // showFeInfo()
     // loop_fe(chap_km_j) //周二卡谬练级
-    loop_fe(chap_ll_j) //周三罗罗练级
+    // loop_fe(chap_ll_jrqerqe) //周三罗罗练级
+    loop_fe(chap_wed) //周六瓦尔达练级
     // startFe(chap_km)
     // loop_enemyturn()
 }, 1000)
@@ -332,6 +333,17 @@ const chap_ll_y = [
     ['D', [269, 1631], [85, 1448]],
     // ['D', [85, 1630], [269, 1806]],
     ['D', [89, 1808], [77, 1443]],
+    ['RESTART'],
+]
+// 周六-瓦尔达
+const chap_wed = [
+    ['D', [630, 899], [450, 1083]],
+    ['END'],
+    ['D', [453, 897], [453, 1262]],
+    ['D', [267, 1082], [450, 1271]],
+    ['WAIT', FeState.MY_TURN], //等待升级
+    ['D', [450, 1083], [90, 1083]],
+    ['D', [271, 897], [88, 1085]],
     ['RESTART'],
 ]
 // #endregion
