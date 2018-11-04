@@ -32,14 +32,27 @@ namespace engines {
 //images
 type Color = number
 
-class Image {
+class AutoImage {
+    getHeight(): number;
     pixel(x: number, y: number): Color
 }
 
 function requestScreenCapture(): boolean;
 
-function captureScreen(): Image;
+function captureScreen(): AutoImage;
 
+/**
+ * 区域找色
+ * @param img 
+ * @param color 
+ * @param x 
+ * @param y 
+ */
+function findColorInRegion(img: AutoImage, color: Color | string, x: number, y: number, width?: number, height?: number, threshold?: number);
+namespace images {
+    function findColor(image, color, options)
+    function findMultiColors(img: AutoImage, firstColor, colors, options?):Point;
+}
 class colors {
     /**
      *

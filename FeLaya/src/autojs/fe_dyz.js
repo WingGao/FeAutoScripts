@@ -1,13 +1,17 @@
 setTimeout(() => {
     // check_app()
-    // loop_dyz(FeLeve.LUNATIC)
+    showInfoView()
+    // loop_dyz(FeLeve.INFERNAL)
     // showFeInfo()
     // loop_fe(chap_km_j) //周二卡谬练级
     // loop_fe(chap_ll_j) //周三罗罗练级
-    loop_fe(chap_wed) //周六瓦尔达练级
+    // loop_fe(chap_wed) //周六瓦尔达练级
+    loop_fe(chap_aews) // 周日-阿尔维斯
+
     // startFe(chap_km)
     // loop_enemyturn()
-}, 1000)
+    // loop_auto(2)
+}, 5000)
 // setInterval(() => {
 //     exit()
 // }, 3000)
@@ -29,9 +33,11 @@ const FeLeve = {
     INFERNAL: 3,
 }
 const P_SAFE = { x: 1070, y: 1920 } //安全点
+const P_BACK = { x: 40, y: 545, color: '#fbcdc2' } //章节页返回
 const P_TEAM = { x: 175, y: 420, color: '#00669c' } //小队
 const P_TURN = { x: 260, y: 2045, color: '#db86a4' } //危险范围
 const P_SKIP = { x: 800, y: 220, color: '#482128' } //跳过
+const P_ERR_1 = { x: 320, y: 1130, color: '#6aa181' } //错误1 803-3101
 
 function initEnv() {
 
@@ -49,7 +55,7 @@ function initEnv() {
  */
 function wclick(xOrPoint, y) {
     if (typeof xOrPoint == "number") {
-        click(x, y + FE_DY)
+        click(xOrPoint, y + FE_DY)
     } else if (typeof xOrPoint == "object" && typeof xOrPoint.x == "number") {
         click(xOrPoint.x, xOrPoint.y + FE_DY)
     }
@@ -112,7 +118,7 @@ function startFe(steps, can_exit) {
                 while (true) {
                     click(1045, 1870 + FE_DY)// 有时候已经stage了
                     sleep(1000)
-                    if ([FeState.MY_TURN, FeState.CHAPTER].indexOf(feState()) >= 0) {
+                    if ([FeState.MY_TURN, FeState.CHAPTER].indexOf(feState(true)) >= 0) {
                         break
                     }
                 }
@@ -130,14 +136,31 @@ function feState(check_btn) {
     let state = FeState.UNKNOWN
     if (colors.isSimilar(getColor(img, P_TURN), P_TURN.color)) {
         state = FeState.MY_TURN
-    } else if (colors.isSimilar(getColor(img, P_TEAM), P_TEAM.color)) {
+    } else if (colors.isSimilar(getColor(img, P_BACK), P_BACK.color)) {
         state = FeState.CHAPTER
     }
     if (check_btn) {
-        if (colors.isSimilar(getColor(img, P_SKIP), P_SKIP.color)) {
-            wclick(P_SKIP);
-        } else {
-            wclick(P_SAFE)
+        let pts = [P_SKIP, P_ERR_1]
+        pts.forEach(pt => {
+            if (colors.isSimilar(getColor(img, pt), pt.color)) {
+                wclick(pt);
+            }
+        })
+        wclick(P_SAFE)
+    }
+    //检查确认按钮
+    let check_ok = true
+    if (check_ok && check_btn) {
+        // let okPos = images.findMultiColors(img, '#456050', [
+        //     [0, 10, '#445b4b'],
+        //     [0, 20, '#3b5645'],
+        //     [0, 30, '#336044'],
+        //     [0, 40, '#2e6f48'],
+        // ], { region: [350, 510 + FE_DY, 1, img.getHeight() - (510 + FE_DY)], threshold: 10 })
+        let okPos = images.findColor(img, '#456050', { region: [350, 510 + FE_DY, 1, img.getHeight() - (510 + FE_DY)] })
+        if (okPos != null) {
+            console.log('find ok btn ', okPos)
+            wclick(okPos.x, okPos.y + 10)
         }
     }
     console.log('feState', state)
@@ -169,14 +192,19 @@ function showFeInfo() {
     let window = floaty.window(
         <vertical padding="5">
             <text id="pSafe" textSize="16sp" textColor="white" text="pSafe" w="100" />
+            <text id="pBack" textSize="16sp" textColor="white" text="pBack" w="100" />
             <text id="pTeam" textSize="16sp" textColor="white" text="pTeam" w="100" />
             <text id="pTurn" textSize="16sp" textColor="white" text="pTurn" w="100" />
             <text id="pSkip" textSize="16sp" textColor="white" text="pSkip" w="100" />
+            <text id="pErr1" textSize="16sp" textColor="white" text="pErr1" w="100" />
         </vertical>
     )
     let img = captureScreen();
     ui.run(() => {
         window.pSafe.setBackgroundColor(img.pixel(P_SAFE.x, P_SAFE.y + FE_DY))
+        let colorBack = img.pixel(P_BACK.x, P_BACK.y + FE_DY)
+        window.pBack.setBackgroundColor(colorBack)
+        logInfo += "P_BACK " + colors.toString(colorBack) + "\n"
         let colorTeam = img.pixel(P_TEAM.x, P_TEAM.y + FE_DY)
         window.pTeam.setBackgroundColor(colorTeam)
         logInfo += "P_TEAM " + colors.toString(colorTeam) + "\n"
@@ -184,13 +212,23 @@ function showFeInfo() {
         window.pTurn.setBackgroundColor(colorTurn)
         logInfo += "P_TURN " + colors.toString(colorTurn) + "\n"
         let colorSkip = getColor(img, P_SKIP)
-        window.pTurn.setBackgroundColor(colorSkip)
+        window.pSkip.setBackgroundColor(colorSkip)
         logInfo += "P_SKIP " + colors.toString(colorSkip) + "\n"
+
+        let colorErr1 = getColor(img, P_ERR_1)
+        window.pErr1.setBackgroundColor(colorErr1)
+        logInfo += "P_ERR_1 " + colors.toString(colorErr1) + "\n"
     })
+    //ok按钮
+    let okX = 361, okY = 1782
+    for (let i = 0; i < 50; i++) {
+        let col = getColor(img, okX, okY + i)
+        logInfo += 'ok_' + i + ' ' + colors.toString(col) + "\n"
+    }
 
-    logInfo += "feState " + feState()
+    logInfo += "feState " + feState(false)
     console.log("\n" + logInfo)
-
+    sleep(5000)
 }
 
 function check_app() {
@@ -218,6 +256,7 @@ app.intent({
 // 信息窗口
 let MFW;
 function showInfoView() {
+    if (MFW != null) return;
     MFW = floaty.window(
         <horizontal>
             <text id="feText" textSize="16sp" textColor="#f44336" text="info" w="auto" />
@@ -250,11 +289,47 @@ function loop_dyz(level) {
         sleep(2000)
         click(310, 1630 + FE_DY)
         sleep(1000)
-        wait_state(FeState.MY_TURN)
-        startFe([['AUTO'], ['END']])
+        wait_state(FeState.MY_TURN, true)
+        let steps = [
+            ['D', [199, 1687], [205, 1426]],
+            ['D', [346, 1689], [202, 1421]],
+            ['D', [205, 1426], [202, 1155]],
+            ['AUTO'], ['END']
+        ]
+        startFe(steps)
         wait_state(FeState.CHAPTER, true)
         click(310, 1825 + FE_DY) //点击 确定
         sleep(2000)
+    }
+}
+/**
+ * 自动任务
+ * 比如，旋涡30级,自动
+ * @param {number} chapterIdx 章节的位置，重上往下，0开始
+ */
+function loop_auto(chapterIdx) {
+    let chapPoints = {
+        2: { x: 275, y: 1455 },
+    }
+
+    showInfoView()
+    let cnt = 0;
+    let chapPt = chapPoints[chapterIdx]
+    if (chapPt == null) {
+        alert('当前章节不存在')
+        return
+    }
+    while (true) {
+        cnt += 1
+        updateInfo("fe_auto round " + cnt)
+        wclick(chapPt)
+        wait_state(FeState.MY_TURN, true)
+        let steps = [
+            ['AUTO'],
+            ['END']
+        ]
+        startFe(steps)
+        wait_state(FeState.CHAPTER, true)
     }
 }
 function loop_fe(steps) {
@@ -342,8 +417,15 @@ const chap_wed = [
     ['D', [453, 897], [453, 1262]],
     ['D', [267, 1082], [450, 1271]],
     ['WAIT', FeState.MY_TURN], //等待升级
-    ['D', [450, 1083], [90, 1083]],
-    ['D', [271, 897], [88, 1085]], //治疗
+    // ['D', [450, 1083], [90, 1083]],
+    // ['D', [271, 897], [88, 1085]], //治疗
+    ['RESTART'],
+]
+// 周日-阿尔维斯
+const chap_aews = [
+    ['T', [453, 897], [465, 1262], [817, 1262]],
+    ['D', [634, 896], [819, 1258]],
+    ['WAIT', FeState.MY_TURN], //等待升级
     ['RESTART'],
 ]
 // #endregion
